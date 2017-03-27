@@ -96,8 +96,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_instruksi) {
             fragment = new HomeFragment();
             title = "Beranda";
-        } else if (id == R.id.nav_share) {
-
+        } else if (id == R.id.nav_logout) {
+            fragment = new HomeFragment();
+            title = "Beranda";
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
