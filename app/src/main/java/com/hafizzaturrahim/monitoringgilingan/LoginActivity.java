@@ -3,6 +3,8 @@ package com.hafizzaturrahim.monitoringgilingan;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,6 +13,8 @@ public class LoginActivity extends AppCompatActivity {
 
     Button loginBtn;
     TextView notifTxt;
+    EditText usernameEdt,passEdt;
+
     String username, password;
 
     @Override
@@ -20,19 +24,25 @@ public class LoginActivity extends AppCompatActivity {
 
         loginBtn = (Button) findViewById(R.id.btnlogin);
         notifTxt = (TextView) findViewById(R.id.notifLgn);
-        EditText usernameEdt = (EditText) findViewById(R.id.usernamelogin);
-        EditText passEdt = (EditText) findViewById(R.id.passwordlogin);
-        username = usernameEdt.getText().toString();
-        password = passEdt.getText().toString();
+        usernameEdt = (EditText) findViewById(R.id.usernamelogin);
+        passEdt = (EditText) findViewById(R.id.passwordlogin);
+        usernameEdt.setError("Username harus diisi");
+        passEdt.setError("Password harus diisi");
+
 
     }
 
-    public void login() {
-        if (username.isEmpty() || password.isEmpty()) {
+    public void login(View view) {
+
+        username = usernameEdt.getText().toString();
+        password = passEdt.getText().toString();
+
+        if (username.equals("") || password.equals("")) {
 
         } else {
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
 
     }

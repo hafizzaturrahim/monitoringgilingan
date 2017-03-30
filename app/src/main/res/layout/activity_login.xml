@@ -80,6 +80,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/notifLgn"
         android:text="password atau username salah"
+        android:visibility="gone"
         android:textColor="@color/colorPrimary"
         android:gravity="center"
         android:layout_marginTop="4dp" />
