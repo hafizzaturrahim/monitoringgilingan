@@ -13,21 +13,22 @@ public class LoginActivity extends AppCompatActivity {
 
     Button loginBtn;
     TextView notifTxt;
-    EditText usernameEdt,passEdt;
+    EditText usernameEdt, passEdt;
 
     String username, password;
+
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        sessionManager = new SessionManager(this);
         loginBtn = (Button) findViewById(R.id.btnlogin);
         notifTxt = (TextView) findViewById(R.id.notifLgn);
         usernameEdt = (EditText) findViewById(R.id.usernamelogin);
         passEdt = (EditText) findViewById(R.id.passwordlogin);
-        usernameEdt.setError("Username harus diisi");
-        passEdt.setError("Password harus diisi");
 
 
     }
@@ -37,12 +38,14 @@ public class LoginActivity extends AppCompatActivity {
         username = usernameEdt.getText().toString();
         password = passEdt.getText().toString();
 
-        if (username.equals("") || password.equals("")) {
-
-        } else {
+        if (!username.equals("") && !password.equals("")) {
+            sessionManager.createLoginSession(username);
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
+        } else {
+            usernameEdt.setError("Username harus diisi");
+            passEdt.setError("Password harus diisi");
         }
 
     }

@@ -1,5 +1,6 @@
 package com.hafizzaturrahim.monitoringgilingan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,11 +22,19 @@ import com.hafizzaturrahim.monitoringgilingan.laporan.ReportFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sessionManager = new SessionManager(this);
+        if (!sessionManager.isLoggedIn()) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -62,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void selectMenu(int id){
+    private void selectMenu(int id) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
 
@@ -79,8 +89,7 @@ public class MainActivity extends AppCompatActivity
             fragment = new InstructionFragment();
             title = "Instruksi";
         } else if (id == R.id.nav_logout) {
-            fragment = new HomeFragment();
-            title = "Logout";
+            logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -95,5 +104,12 @@ public class MainActivity extends AppCompatActivity
             // set the toolbar title
             getSupportActionBar().setTitle(title);
         }
+    }
+
+    private void logout() {
+        sessionManager.logoutUser();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
