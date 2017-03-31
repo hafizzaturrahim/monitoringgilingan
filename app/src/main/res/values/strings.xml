@@ -6,6 +6,13 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="parameter_prompt">Pilih parameter mesin</string>
+    <string-array name="list_parameter">
+        <item>Suhu mesin 1</item>
+        <item>Kecepatan putaran mesin 1</item>
+        <item>Kecepatan mesin 1</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
