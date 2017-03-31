@@ -56,6 +56,12 @@ public class InstructionFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),DetailInstructionActivity.class);
+                intent.putExtra("judul_ins",instructions.get(position).getTitleInstruction());
+                intent.putExtra("pengirim_ins",instructions.get(position).getSenderInstriction());
+                intent.putExtra("penerima_ins",instructions.get(position).getRecipientInstruction());
+                intent.putExtra("isi_ins",instructions.get(position).getDetailInstruction());
+                intent.putExtra("status_ins",instructions.get(position).getStatusInsruction());
+
                 startActivity(intent);
             }
         });
@@ -67,6 +73,7 @@ public class InstructionFragment extends Fragment {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 Intent intent = new Intent(getActivity(), NewInstructionActivity.class);
+
                 startActivity(intent);
             }
         });
