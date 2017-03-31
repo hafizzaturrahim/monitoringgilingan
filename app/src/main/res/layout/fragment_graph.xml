@@ -74,5 +74,17 @@
             android:hint="Jam berakhir" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnMulai"
+            android:theme="@style/LoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Mulai" />
+    </RelativeLayout>
 
 </LinearLayout>

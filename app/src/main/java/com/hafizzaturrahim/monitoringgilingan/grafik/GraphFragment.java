@@ -2,6 +2,7 @@ package com.hafizzaturrahim.monitoringgilingan.grafik;
 
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.hafizzaturrahim.monitoringgilingan.R;
@@ -28,11 +30,17 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     //UI References
     private EditText fromDateEtxt;
     private EditText toDateEtxt;
+    private EditText fromTimeExt;
+    private EditText toTimeExt;
 
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
 
+    private TimePickerDialog fromTimePickerDialog;
+    private TimePickerDialog toTimePickerDialog;
+
     private SimpleDateFormat dateFormatter;
+    private SimpleDateFormat timeFormatter;
 
     // 0 = parameter
     // 1 = tanggal mulai
@@ -70,7 +78,6 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         });
 
 
-
         fromDateEtxt = (EditText) rowView.findViewById(R.id.etxt_fromdate);
         fromDateEtxt.setInputType(InputType.TYPE_NULL);
         fromDateEtxt.requestFocus();
@@ -78,7 +85,15 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         toDateEtxt = (EditText) rowView.findViewById(R.id.etxt_todate);
         toDateEtxt.setInputType(InputType.TYPE_NULL);
 
+        fromTimeExt = (EditText) rowView.findViewById(R.id.etxt_fromtime);
+        fromTimeExt.setInputType(InputType.TYPE_NULL);
+
+        toTimeExt = (EditText) rowView.findViewById(R.id.etxt_totime);
+        toTimeExt.setInputType(InputType.TYPE_NULL);
+
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        timeFormatter = new SimpleDateFormat("kk:ss", Locale.getDefault());
+
         setDateTimeField();
         return rowView;
     }
@@ -86,6 +101,9 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     private void setDateTimeField() {
         fromDateEtxt.setOnClickListener(this);
         toDateEtxt.setOnClickListener(this);
+
+        fromTimeExt.setOnClickListener(this);
+        toTimeExt.setOnClickListener(this);
 
         Calendar newCalendar = Calendar.getInstance();
         fromDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
@@ -107,6 +125,24 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        fromTimePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(hourOfDay, minute);
+                fromTimeExt.setText(timeFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
+
+        toTimePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(hourOfDay, minute);
+                toTimeExt.setText(timeFormatter.format(newDate.getTime()));
+            }
+        }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
     }
 
     @Override
@@ -115,6 +151,10 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             fromDatePickerDialog.show();
         } else if (v == toDateEtxt) {
             toDatePickerDialog.show();
+        } else if (v == fromTimeExt) {
+            fromTimePickerDialog.show();
+        } else if (v == toTimeExt) {
+            toTimePickerDialog.show();
         }
     }
 }
