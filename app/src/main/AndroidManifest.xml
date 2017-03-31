@@ -24,9 +24,10 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity android:name=".SplashScreenActivity" />
-        <activity android:name=".laporan.DetailReportActivity"></activity>
+        <activity android:name=".laporan.DetailReportActivity" />
+        <activity android:name=".grafik.ChartActivity"></activity>
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -39,6 +40,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     private TimePickerDialog fromTimePickerDialog;
     private TimePickerDialog toTimePickerDialog;
 
+    private Button mulaiBtn;
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
@@ -77,6 +79,14 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
 
         });
 
+        mulaiBtn = (Button) rowView.findViewById(R.id.btnMulai);
+        mulaiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         fromDateEtxt = (EditText) rowView.findViewById(R.id.etxt_fromdate);
         fromDateEtxt.setInputType(InputType.TYPE_NULL);
@@ -112,6 +122,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 fromDateEtxt.setText(dateFormatter.format(newDate.getTime()));
+                selectedInput[1] = dateFormatter.format(newDate.getTime());
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -122,6 +133,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
                 toDateEtxt.setText(dateFormatter.format(newDate.getTime()));
+                selectedInput[2] = dateFormatter.format(newDate.getTime());
             }
 
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -130,9 +142,10 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                newDate.set(Calendar.MINUTE,minute);
+                newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                newDate.set(Calendar.MINUTE, minute);
                 fromTimeExt.setText(timeFormatter.format(newDate.getTime()));
+                selectedInput[3] = timeFormatter.format(newDate.getTime());
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 
@@ -140,9 +153,10 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                newDate.set(Calendar.MINUTE,minute);
+                newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                newDate.set(Calendar.MINUTE, minute);
                 toTimeExt.setText(timeFormatter.format(newDate.getTime()));
+                selectedInput[4] = timeFormatter.format(newDate.getTime());
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
     }
@@ -159,4 +173,5 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             toTimePickerDialog.show();
         }
     }
+
 }
