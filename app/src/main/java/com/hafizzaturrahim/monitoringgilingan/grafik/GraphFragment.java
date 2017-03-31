@@ -92,7 +92,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         toTimeExt.setInputType(InputType.TYPE_NULL);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        timeFormatter = new SimpleDateFormat("kk:ss", Locale.getDefault());
+        timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
         setDateTimeField();
         return rowView;
@@ -130,7 +130,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(hourOfDay, minute);
+                newDate.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                newDate.set(Calendar.MINUTE,minute);
                 fromTimeExt.setText(timeFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
@@ -139,7 +140,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Calendar newDate = Calendar.getInstance();
-                newDate.set(hourOfDay, minute);
+                newDate.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                newDate.set(Calendar.MINUTE,minute);
                 toTimeExt.setText(timeFormatter.format(newDate.getTime()));
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
