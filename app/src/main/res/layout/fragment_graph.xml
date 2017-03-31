@@ -9,17 +9,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Parameter mesin : "
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:text="Parameter mesin : " />
 
     <Spinner
         android:id="@+id/spParam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4dp"
+        android:layout_marginBottom="4dp"
         android:entries="@array/list_parameter"
-        android:prompt="@string/parameter_prompt"
-        android:layout_marginBottom="4dp">
+        android:padding="4dp"
+        android:prompt="@string/parameter_prompt">
 
     </Spinner>
 
@@ -41,11 +41,37 @@
             android:hint="Tanggal mulai" />
 
         <EditText
+            android:id="@+id/etxt_fromtime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:hint="Jam mulai" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Berakhir :" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <EditText
             android:id="@+id/etxt_todate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:hint="Tanggal berakhir" />
+
+        <EditText
+            android:id="@+id/etxt_totime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:hint="Jam berakhir" />
     </LinearLayout>
 
 
