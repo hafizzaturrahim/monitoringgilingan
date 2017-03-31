@@ -23,7 +23,7 @@ public class InstructionAdapter extends ArrayAdapter<Instruction> {
     private ArrayList<Instruction> instructions = new ArrayList<>();
 
     public InstructionAdapter(Context context, ArrayList<Instruction> instructions) {
-        super(context, R.layout.item_report, instructions);
+        super(context, R.layout.item_instruction, instructions);
         this.context = context;
         this.instructions = instructions;
     }
@@ -33,14 +33,17 @@ public class InstructionAdapter extends ArrayAdapter<Instruction> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         //Load Custom Layout untuk list
-        View rowView = inflater.inflate(R.layout.item_report, null, true);
+        View rowView = inflater.inflate(R.layout.item_instruction, null, true);
 
         //Declarasi komponen
-        TextView title = (TextView) rowView.findViewById(R.id.txtTitleReport);
-        TextView date = (TextView) rowView.findViewById(R.id.txtDateReport);
+        TextView recipient = (TextView) rowView.findViewById(R.id.txtRecipientInstruction);
+        TextView title = (TextView) rowView.findViewById(R.id.txtTitleInstruction);
+        TextView date = (TextView) rowView.findViewById(R.id.txtDateInstruction);
 
         //Set Parameter Value
-
+        recipient.setText(instructions.get(position).getRecipientInstruction());
+        title.setText(instructions.get(position).getTitleInstruction());
+        date.setText(instructions.get(position).getDateInstruction());
 
         return rowView;
     }

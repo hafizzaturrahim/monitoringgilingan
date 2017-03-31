@@ -11,8 +11,15 @@ public class Instruction {
     String recipientInstruction;
     String detailInstruction;
     String statusInsruction;
+    String dateInstruction;
 
     public Instruction() {
+    }
+
+    public Instruction(String titleInstruction, String recipientInstruction, String dateInstruction) {
+        this.titleInstruction = titleInstruction;
+        this.recipientInstruction = recipientInstruction;
+        this.dateInstruction = dateInstruction;
     }
 
     public String getTitleInstruction() {
@@ -53,5 +60,13 @@ public class Instruction {
 
     public void setStatusInsruction(String statusInsruction) {
         this.statusInsruction = statusInsruction;
+    }
+
+    public String getDateInstruction() {
+        return dateInstruction;
+    }
+
+    public void setDateInstruction(String dateInstruction) {
+        this.dateInstruction = dateInstruction;
     }
 }

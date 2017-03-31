@@ -39,13 +39,21 @@ public class LoginActivity extends AppCompatActivity {
         password = passEdt.getText().toString();
 
         if (!username.equals("") && !password.equals("")) {
-            sessionManager.createLoginSession(username);
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            if(username.equals("tes") && password.equals("tes")){
+                sessionManager.createLoginSession(username);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }else{
+                notifTxt.setVisibility(View.VISIBLE);
+            }
+
         } else {
-            usernameEdt.setError("Username harus diisi");
-            passEdt.setError("Password harus diisi");
+            if (username.equals("")) {
+                usernameEdt.setError("Username harus diisi");
+            } else if (password.equals("")) {
+                passEdt.setError("Password harus diisi");
+            }
         }
 
     }
