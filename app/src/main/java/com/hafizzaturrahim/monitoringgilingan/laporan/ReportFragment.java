@@ -36,6 +36,8 @@ public class ReportFragment extends Fragment {
         reports = new ArrayList<>();
         Report report = new Report();
         report.setTitleReport("Judul Laporan");
+        report.setDateReport("12 Maret 2017");
+        report.setContentReport("sgdfgdf fdgdgdfgfdgfdg");
         reports.add(report);
         reports.add(report);
         ReportAdapter adapter = new ReportAdapter(getActivity(), reports);
@@ -45,6 +47,12 @@ public class ReportFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),DetailReportActivity.class);
+                String judul = reports.get(position).getTitleReport();
+                String tanggal = reports.get(position).getDateReport();
+                String konten = reports.get(position).getContentReport();
+                intent.putExtra("judul",judul);
+                intent.putExtra("tanggal",tanggal);
+                intent.putExtra("konten",konten);
                 startActivity(intent);
             }
         });

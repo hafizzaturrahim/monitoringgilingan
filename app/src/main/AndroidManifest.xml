@@ -26,8 +26,11 @@
             android:name=".LoginActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".SplashScreenActivity" />
-        <activity android:name=".laporan.DetailReportActivity" />
-        <activity android:name=".grafik.ChartActivity"></activity>
+        <activity android:name=".grafik.ChartActivity" />
+        <activity
+            android:name=".instruksi.NewInstructionActivity"
+            android:label="@string/title_activity_new_instruction" />
+        <activity android:name=".laporan.DetailReportActivity"></activity>
     </application>
 
 </manifest>

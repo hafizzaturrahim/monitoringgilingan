@@ -14,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.hafizzaturrahim.monitoringgilingan.beranda.HomeFragment;
 import com.hafizzaturrahim.monitoringgilingan.grafik.GraphFragment;
@@ -44,9 +46,14 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View hView =  navigationView.getHeaderView(0);
+
+        TextView nav_nama = (TextView)hView.findViewById(R.id.nav_nama);
+
+        nav_nama.setText("Halo, " +sessionManager.getUsernameSession());
 
         //set beranda sebagai menu pertama
         navigationView.getMenu().getItem(0).setChecked(true);

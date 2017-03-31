@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     tools:context="com.hafizzaturrahim.monitoringgilingan.laporan.ReportFragment">
 
-   <ListView
-       android:id="@+id/lvReport"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
-   </ListView>
+    <ListView
+        android:id="@+id/lvReport"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"></ListView>
 
 </LinearLayout>

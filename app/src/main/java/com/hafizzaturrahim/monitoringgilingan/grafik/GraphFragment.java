@@ -84,6 +84,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), ChartActivity.class);
+                intent.putExtra("input",selectedInput);
                 startActivity(intent);
             }
         });
