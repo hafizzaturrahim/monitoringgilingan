@@ -4,7 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.hafizzaturrahim.monitoringgilingan.instruksi.NewInstructionActivity">
+
+    <TextView
+        android:id="@+id/txtNewRecipient"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Penerima : " />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Isi instruksi : " />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:lines="6"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/etNewInst"/>
 
 
 </LinearLayout>
