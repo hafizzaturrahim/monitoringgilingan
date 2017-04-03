@@ -83,9 +83,27 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         mulaiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                if (selectedInput[1].equals("") || selectedInput[2].equals("") || selectedInput[3].equals("") || selectedInput[4].equals("")) {
+//                    String notif = "Wajib diisi";
+//                    if (selectedInput[1].equals("")) {
+//                        fromDateEtxt.setError(notif);
+//                    }
+//                    if (selectedInput[2].equals("")) {
+//                        toDateEtxt.setError(notif);
+//                    }
+//                    if (selectedInput[3].equals("")) {
+//                        fromTimeExt.setError(notif);
+//                    }
+//                    if (selectedInput[4].equals("")) {
+//                        toTimeExt.setError(notif);
+//                    }
+//                } else {
+//
+//                }
                 Intent intent = new Intent(getActivity(), ChartActivity.class);
-                intent.putExtra("input",selectedInput);
+                intent.putExtra("input", selectedInput);
                 startActivity(intent);
+
             }
         });
 
