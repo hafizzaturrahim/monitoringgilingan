@@ -49,15 +49,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        View hView =  navigationView.getHeaderView(0);
+        View hView = navigationView.getHeaderView(0);
 
-        TextView nav_nama = (TextView)hView.findViewById(R.id.nav_nama);
+        TextView nav_nama = (TextView) hView.findViewById(R.id.nav_nama);
 
-        nav_nama.setText("Halo, " +sessionManager.getUsernameSession());
+        nav_nama.setText("Halo, " + sessionManager.getUsernameSession());
 
+        int chosenMenu;
+        Intent intent = getIntent();
+
+        chosenMenu = intent.getIntExtra("menu", 0);
         //set beranda sebagai menu pertama
-        navigationView.getMenu().getItem(0).setChecked(true);
-        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_beranda));
+        navigationView.getMenu().getItem(chosenMenu).setChecked(true);
+        if (chosenMenu == 0) {
+            onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_beranda));
+        }else if(chosenMenu == 3){
+            onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_instruksi));
+        }
     }
 
     @Override
