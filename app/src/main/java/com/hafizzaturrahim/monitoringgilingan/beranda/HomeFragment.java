@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,6 +20,8 @@ import com.hafizzaturrahim.monitoringgilingan.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -62,7 +65,18 @@ public class HomeFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        String body = null;
+                        //get status code here
+                        String statusCode = String.valueOf(error.networkResponse.statusCode);
+                        //get response body and parse with appropriate encoding
+                        if(error.networkResponse.data!=null) {
+                            try {
+                                body = new String(error.networkResponse.data,"UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+//                        Toast.makeText(getActivity(), "Error " +statusCode+ " message " +body, Toast.LENGTH_SHORT).show();
                     }
                 });
         //add request to queue
