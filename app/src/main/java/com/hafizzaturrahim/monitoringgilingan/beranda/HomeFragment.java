@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         pDialog.dismiss();
                     }
                 },
