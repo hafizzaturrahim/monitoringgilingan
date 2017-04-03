@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "690443160235",
+    "firebase_url": "https://monitoring-mesin-gilingan.firebaseio.com",
+    "project_id": "monitoring-mesin-gilingan",
+    "storage_bucket": "monitoring-mesin-gilingan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690443160235:android:8b1b2f77232c18b5",
+        "android_client_info": {
+          "package_name": "com.hafizzaturrahim.monitoringgilingan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "690443160235-qkkh7o9vdj7eggfgor2q4c5ml652bu56.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hafizzaturrahim.monitoringgilingan",
+            "certificate_hash": "bb0b9c656d7a07d90a526f14c8d46b80f97a7efe"
+          }
+        },
+        {
+          "client_id": "690443160235-vnv1sf2crrar17u0isnh42q5rjsidhe2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAezyjL8QP4WYyUVtktUjdnl8wDglNb3YE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "690443160235-vnv1sf2crrar17u0isnh42q5rjsidhe2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

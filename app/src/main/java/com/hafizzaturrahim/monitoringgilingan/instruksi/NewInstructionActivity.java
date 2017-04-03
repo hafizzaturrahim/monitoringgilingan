@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.hafizzaturrahim.monitoringgilingan.MainActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
@@ -16,12 +17,19 @@ import com.hafizzaturrahim.monitoringgilingan.R;
 public class NewInstructionActivity extends AppCompatActivity {
 
     Button confirmBtn;
+    String penerima;
+    String isi;
+
+    EditText edtRecipient, edtContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_instruction);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        edtRecipient = (EditText) findViewById(R.id.edtNewRecipient);
+        edtContent = (EditText) findViewById(R.id.edtNewInst);
 
         confirmBtn = (Button) findViewById(R.id.btnConfirmInstruction);
 
@@ -39,10 +47,26 @@ public class NewInstructionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void confirmInstruction(View view){
-        Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
-        intent.putExtra("menu",3);
-        startActivity(intent);
+    public void confirmInstruction(View view) {
+
+        penerima = edtRecipient.getText().toString();
+        isi = edtContent.getText().toString();
+
+
+        if (!penerima.equals("") && !isi.equals("")) {
+            Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
+            intent.putExtra("menu", 3);
+            startActivity(intent);
+        } else {
+            if (penerima.equals("")) {
+                edtRecipient.setError("Kolom harus diisi");
+            }
+            if (isi.equals("")) {
+                edtContent.setError("Kolom harus diisi");
+            }
+        }
+
+
     }
 
 }
