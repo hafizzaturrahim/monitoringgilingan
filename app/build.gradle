@@ -37,8 +37,8 @@ dependencies {
     //firebase
     compile 'com.google.firebase:firebase-core:9.8.0'
     compile 'com.google.firebase:firebase-messaging:9.8.0'
-
-
+    //volley
+    compile 'com.android.volley:volley:1.0.0'
     testCompile 'junit:junit:4.12'
 
 }
