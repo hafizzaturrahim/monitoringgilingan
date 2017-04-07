@@ -32,11 +32,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         sessionManager = new SessionManager(this);
-        if (!sessionManager.isLoggedIn()) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

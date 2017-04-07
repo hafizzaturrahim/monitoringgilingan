@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.hafizzaturrahim.monitoringgilingan.karyawan.InstructionActivity;
 
 import org.json.JSONObject;
 
@@ -34,9 +35,20 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
 
         sessionManager = new SessionManager(this);
+        Intent intent;
+        if (sessionManager.isLoggedIn()) {
+            if (sessionManager.getIdLogin().equals("1")) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+            } else {
+                intent = new Intent(LoginActivity.this, InstructionActivity.class);
+            }
+            startActivity(intent);
+            finish();
+        }
+
+        setContentView(R.layout.activity_login);
         loginBtn = (Button) findViewById(R.id.btnlogin);
         notifTxt = (TextView) findViewById(R.id.notifLgn);
         usernameEdt = (EditText) findViewById(R.id.usernamelogin);
@@ -51,15 +63,21 @@ public class LoginActivity extends AppCompatActivity {
         username = usernameEdt.getText().toString();
         password = passEdt.getText().toString();
 
+        String id = "2";
         if (!username.equals("") && !password.equals("")) {
 //            requestData();
 
-            if(username.equals("tes") && password.equals("tes")){
-                sessionManager.createLoginSession(username);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            if (username.equals("tes") && password.equals("tes")) {
+                sessionManager.createLoginSession(username, id);
+                Intent intent;
+                if (id.equals("1")) {
+                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                } else {
+                    intent = new Intent(LoginActivity.this, InstructionActivity.class);
+                }
                 startActivity(intent);
                 finish();
-            }else{
+            } else {
                 notifTxt.setVisibility(View.VISIBLE);
             }
 
@@ -78,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = "http://localhost/gilingan/login.php?username="+username+"&password="+password;
+        String url = "http://127.0.0.1/gilingan/login.php?username=" + username + "&password=" + password;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
