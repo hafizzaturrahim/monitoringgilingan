@@ -11,17 +11,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.karyawan.InstructionActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
@@ -29,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     TextView notifTxt;
     EditText usernameEdt, passEdt;
 
-    String username, password;
-    String id = "2";
+    String username, password, id = null;
+    boolean isSuccess = false;
 
     SessionManager sessionManager;
 
@@ -39,19 +45,26 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sessionManager = new SessionManager(this);
-        Intent intent;
-        if (sessionManager.isLoggedIn()) {
-            if (sessionManager.getIdLogin().equals("1")) {
-                intent = new Intent(LoginActivity.this, MainActivity.class);
-            } else {
-                intent = new Intent(LoginActivity.this, InstructionActivity.class);
-            }
-            startActivity(intent);
-            finish();
-        }
+//        if (sessionManager.isLoggedIn()) {
+//            Intent intent;
+//
+//            if ("1".equals(sessionManager.getIdLogin())) {
+//                intent = new Intent(LoginActivity.this, MainActivity.class);
+//            } else {
+//                intent = new Intent(LoginActivity.this, InstructionActivity.class);
+//            }
+//            startActivity(intent);
+//            finish();
+//        }
 
         setContentView(R.layout.activity_login);
         loginBtn = (Button) findViewById(R.id.btnlogin);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
         notifTxt = (TextView) findViewById(R.id.notifLgn);
         usernameEdt = (EditText) findViewById(R.id.usernamelogin);
         passEdt = (EditText) findViewById(R.id.passwordlogin);
@@ -60,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void login(View view) {
+    public void login() {
 
         username = usernameEdt.getText().toString();
         password = passEdt.getText().toString();
@@ -68,17 +81,17 @@ public class LoginActivity extends AppCompatActivity {
 
         if (!username.equals("") && !password.equals("")) {
             requestData();
-
-            if (username.equals("tes") && password.equals("tes")) {
-                sessionManager.createLoginSession(username, id);
+            if (isSuccess) {
+//                sessionManager.createLoginSession(username, id);
                 Intent intent;
-                if (id.equals("1")) {
-                    intent = new Intent(LoginActivity.this, MainActivity.class);
+                if ("1".equals(id)) {
+                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
                 } else {
-                    intent = new Intent(LoginActivity.this, InstructionActivity.class);
+//                    intent = new Intent(LoginActivity.this, InstructionActivity.class);
+                    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
                 }
-                startActivity(intent);
-                finish();
+//                startActivity(intent);
+//                finish();
             } else {
                 notifTxt.setVisibility(View.VISIBLE);
             }
@@ -90,43 +103,77 @@ public class LoginActivity extends AppCompatActivity {
                 passEdt.setError("Password harus diisi");
             }
         }
-
     }
 
     private void requestData() {
-
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
         String url = "http://192.168.137.1/gilinganlocal/login.php?name=" + username + "&pass=" + password;
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(LoginActivity.this, "berhasil", Toast.LENGTH_SHORT).show();
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        parseJSON(response);
                         pDialog.dismiss();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        String body = null;
-//                        //get status code here
-//                        String statusCode = String.valueOf(error.networkResponse.statusCode);
-//                        //get response body and parse with appropriate encoding
-//                        if(error.networkResponse.data!=null) {
-//                            try {
-//                                body = new String(error.networkResponse.data,"UTF-8");
-//                            } catch (UnsupportedEncodingException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                        Toast.makeText(getActivity(), "Error " +statusCode+ " message " +body, Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
+
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
                     }
                 });
+//(
+//            @Override
+//            protected Map<String,String> getParams(){
+////                Map<String,String> params = new HashMap<String, String>();
+////
+////                params.put("&code=",accessToken);
+//                return params;
+//            }
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> params = new HashMap<String, String>();
+//                params.put("Authorization", "Basic " + base64);
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                params.put("Accept", "*/*" );
+//                return super.getHeaders();
+//            })
+
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void parseJSON(String result) {
+        if (!result.contains("gagal")) {
+            try {
+                JSONObject data = new JSONObject(result);
+                JSONArray dataAr = data.getJSONArray("data");
+                JSONObject user = dataAr.getJSONObject(0);
+
+                username = user.getString("username");
+                password = user.getString("password");
+                id = user.getString("level");
+
+                Log.d("username : " +username,"id " +id);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            isSuccess = true;
+        } else {
+            isSuccess = false;
+        }
 
     }
 
