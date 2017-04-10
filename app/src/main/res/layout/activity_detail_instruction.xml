@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.hafizzaturrahim.monitoringgilingan.instruksi.DetailInstructionActivity">
 
     <LinearLayout
@@ -19,8 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -33,6 +33,12 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
                 android:text="Penerima" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Status " />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,13 +92,45 @@
                 android:text="Nama penerima" />
 
             <TextView
+                android:id="@+id/txtStatusDetailIns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Belum dikonfirmasi " />
+
+            <TextView
                 android:id="@+id/txtContentDetailIns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
-                android:text="Isi" />
+                android:text="Isi " />
+
+
         </LinearLayout>
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Konfirmasi"
+            android:theme="@style/ConfirmButton"
+            android:id="@+id/btnConfirm"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selesai"
+            android:id="@+id/btnFinish"
+            android:theme="@style/SuccessButton"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
 
 </LinearLayout>

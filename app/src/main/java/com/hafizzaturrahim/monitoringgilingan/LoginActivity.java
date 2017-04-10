@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameEdt, passEdt;
 
     String username, password;
+    String id = "2";
 
     SessionManager sessionManager;
 
@@ -63,9 +65,9 @@ public class LoginActivity extends AppCompatActivity {
         username = usernameEdt.getText().toString();
         password = passEdt.getText().toString();
 
-        String id = "2";
+
         if (!username.equals("") && !password.equals("")) {
-//            requestData();
+            requestData();
 
             if (username.equals("tes") && password.equals("tes")) {
                 sessionManager.createLoginSession(username, id);
@@ -96,12 +98,12 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = "http://127.0.0.1/gilingan/login.php?username=" + username + "&password=" + password;
+        String url = "http://192.168.137.1/gilinganlocal/login.php?name=" + username + "&pass=" + password;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        Toast.makeText(LoginActivity.this, "berhasil", Toast.LENGTH_SHORT).show();
                         pDialog.dismiss();
                     }
                 },

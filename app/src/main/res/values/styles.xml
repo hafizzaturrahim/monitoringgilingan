@@ -23,6 +23,17 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="ConfirmButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#7986CB</item>
+        <item name="colorButtonNormal">#3F51B5</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="SuccessButton" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">#81C784</item>
+        <item name="colorButtonNormal">#4CAF50</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
