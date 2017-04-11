@@ -38,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     String username, password, id = null;
     boolean isSuccess;
 
+    String level = "0";
+
     SessionManager sessionManager;
 
     @Override
@@ -47,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         if (sessionManager.isLoggedIn()) {
             Intent intent;
-            if ("1".equals(sessionManager.getIdLogin())) {
+            if ("1".equals(sessionManager.getLevel())) {
                 intent = new Intent(LoginActivity.this, MainActivity.class);
             } else {
                 intent = new Intent(LoginActivity.this, InstructionActivity.class);
@@ -148,7 +150,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 username = user.getString("username");
                 password = user.getString("password");
-                id = user.getString("level");
+                id = user.getString("id_user");
+                level = user.getString("level");
 
                 Log.d("username : " + username, "id " + id);
             } catch (JSONException e) {
@@ -163,9 +166,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void newActivity() {
         if (isSuccess) {
-            sessionManager.createLoginSession(username, id);
+            sessionManager.createLoginSession(username, id, level);
             Intent intent;
-            if ("1".equals(id)) {
+            if ("1".equals(level)) {
                 intent = new Intent(LoginActivity.this, MainActivity.class);
             } else {
                 intent = new Intent(LoginActivity.this, InstructionActivity.class);

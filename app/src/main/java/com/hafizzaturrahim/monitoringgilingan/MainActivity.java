@@ -11,8 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity
 
         TextView nav_nama = (TextView) hView.findViewById(R.id.nav_nama);
 
-        nav_nama.setText("Halo, " + sessionManager.getUsernameSession());
+        nav_nama.setText("Halo, " + sessionManager.getUsername());
 
         int chosenMenu;
         Intent intent = getIntent();

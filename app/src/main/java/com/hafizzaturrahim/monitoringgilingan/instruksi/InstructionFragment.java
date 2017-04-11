@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +41,8 @@ public class InstructionFragment extends Fragment {
     ListView listInstruction;
     ArrayList<Instruction> instructions;
 
+    TextView txtNoMsg;
+
     public InstructionFragment() {
         // Required empty public constructor
     }
@@ -56,6 +59,7 @@ public class InstructionFragment extends Fragment {
 
         listInstruction = (ListView) rowView.findViewById(R.id.lvInstruction);
 
+        txtNoMsg = (TextView) rowView.findViewById(R.id.txtNoMessage);
         listInstruction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,6 +85,8 @@ public class InstructionFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        requestData();
         return rowView;
     }
 
@@ -90,6 +96,7 @@ public class InstructionFragment extends Fragment {
         /*Json Request*/
         String url = "http://192.168.137.1/gilinganlocal/getInstruction.php?id=" +sessionManager.getIdLogin();
 
+        Log.d("url : " ,url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -129,6 +136,11 @@ public class InstructionFragment extends Fragment {
                     JSONObject insObj = dataAr.getJSONObject(i);
 
                     Instruction ins = new Instruction();
+                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));
+                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
+                    ins.setRecipientInstruction(insObj.getString("penerima"));
+                    ins.setDateInstruction(insObj.getString("tgl"));
+                    ins.setStatusInsruction(insObj.getString("status"));
 
                     instructions.add(ins);
 
@@ -140,7 +152,7 @@ public class InstructionFragment extends Fragment {
             }
 
         } else {
-
+            txtNoMsg.setVisibility(View.VISIBLE);
         }
 
     }
