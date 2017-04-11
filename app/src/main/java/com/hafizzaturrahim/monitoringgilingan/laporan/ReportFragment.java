@@ -60,6 +60,8 @@ public class ReportFragment extends Fragment {
                 String judul = reports.get(position).getTitleReport();
                 String tanggal = reports.get(position).getDateReport();
                 String konten = reports.get(position).getContentReport();
+
+                Log.d("tanggal laporan : " +tanggal,"isi : " +konten);
                 intent.putExtra("judul", judul);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("konten", konten);
@@ -117,8 +119,8 @@ public class ReportFragment extends Fragment {
                     Report report = new Report();
                     report.setId(reportObj.getString("id_laporan"));
                     report.setTitleReport(reportObj.getString("judul_laporan"));
-                    report.setContentReport("detail_laporan");
-                    report.setDateReport("tgl");
+                    report.setContentReport(reportObj.getString("detail_laporan"));
+                    report.setDateReport(reportObj.getString("tgl"));
                     reports.add(report);
 
                 }
