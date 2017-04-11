@@ -3,6 +3,7 @@ package com.hafizzaturrahim.monitoringgilingan.instruksi;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -23,10 +24,23 @@ public class DetailInstructionActivity extends AppCompatActivity {
         TextView txtTitle = (TextView) findViewById(R.id.txtTitleDetailIns);
         TextView txtRecipient = (TextView) findViewById(R.id.txtRecipientDetailIns);
         TextView txtContent = (TextView) findViewById(R.id.txtContentDetailIns);
+        TextView txtStatus = (TextView) findViewById(R.id.txtStatusDetailIns);
+
+
+        Log.d("stat", intent.getStringExtra("status_ins"));
 
         txtTitle.setText(intent.getStringExtra("judul_ins"));
         txtRecipient.setText(intent.getStringExtra("penerima_ins"));
-        txtContent.setText(intent.getStringExtra("isi"));
+        txtContent.setText(intent.getStringExtra("isi_ins"));
+        if (intent.getStringExtra("status_ins").equals("4")) {
+            txtStatus.setText("Dibatalkan");
+        } else if (intent.getStringExtra("status_ins").equals("3")) {
+            txtStatus.setText("Selesai dikerjakan");
+        } else if (intent.getStringExtra("status_ins").equals("2")) {
+            txtStatus.setText("Dikonfirmasi");
+        } else {
+            txtStatus.setText("Menunggu konfirmasi");
+        }
     }
 
     @Override

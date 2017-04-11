@@ -70,6 +70,7 @@ public class InstructionFragment extends Fragment {
                 intent.putExtra("isi_ins",instructions.get(position).getDetailInstruction());
                 intent.putExtra("status_ins",instructions.get(position).getStatusInsruction());
 
+                Log.d("status",instructions.get(position).getStatusInsruction());
                 startActivity(intent);
             }
         });
@@ -138,7 +139,7 @@ public class InstructionFragment extends Fragment {
                     Instruction ins = new Instruction();
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
                     ins.setDetailInstruction(insObj.getString("isi_instruksi"));
-                    ins.setRecipientInstruction(insObj.getString("penerima"));
+                    ins.setRecipientInstruction(insObj.getString("username"));
                     ins.setDateInstruction(insObj.getString("tgl"));
                     ins.setStatusInsruction(insObj.getString("status"));
 
