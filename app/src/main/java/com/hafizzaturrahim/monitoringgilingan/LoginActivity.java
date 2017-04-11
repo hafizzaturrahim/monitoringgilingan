@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText usernameEdt, passEdt;
 
     String username, password, id = null;
-    boolean isSuccess = false;
+    boolean isSuccess;
 
     SessionManager sessionManager;
 
@@ -45,17 +45,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sessionManager = new SessionManager(this);
-//        if (sessionManager.isLoggedIn()) {
-//            Intent intent;
-//
-//            if ("1".equals(sessionManager.getIdLogin())) {
-//                intent = new Intent(LoginActivity.this, MainActivity.class);
-//            } else {
-//                intent = new Intent(LoginActivity.this, InstructionActivity.class);
-//            }
-//            startActivity(intent);
-//            finish();
-//        }
+        if (sessionManager.isLoggedIn()) {
+            Intent intent;
+            if ("1".equals(sessionManager.getIdLogin())) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+            } else {
+                intent = new Intent(LoginActivity.this, InstructionActivity.class);
+            }
+            startActivity(intent);
+            finish();
+        }
 
         setContentView(R.layout.activity_login);
         loginBtn = (Button) findViewById(R.id.btnlogin);
@@ -70,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
         passEdt = (EditText) findViewById(R.id.passwordlogin);
         pDialog = new ProgressDialog(this);
 
-
     }
 
     public void login() {
@@ -78,23 +76,8 @@ public class LoginActivity extends AppCompatActivity {
         username = usernameEdt.getText().toString();
         password = passEdt.getText().toString();
 
-
         if (!username.equals("") && !password.equals("")) {
             requestData();
-            if (isSuccess) {
-//                sessionManager.createLoginSession(username, id);
-                Intent intent;
-                if ("1".equals(id)) {
-                    Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-                } else {
-//                    intent = new Intent(LoginActivity.this, InstructionActivity.class);
-                    Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                }
-//                startActivity(intent);
-//                finish();
-            } else {
-                notifTxt.setVisibility(View.VISIBLE);
-            }
 
         } else {
             if (username.equals("")) {
@@ -118,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("response", response);
                         parseJSON(response);
                         pDialog.dismiss();
+                        newActivity();
                     }
                 },
                 new Response.ErrorListener() {
@@ -166,7 +150,7 @@ public class LoginActivity extends AppCompatActivity {
                 password = user.getString("password");
                 id = user.getString("level");
 
-                Log.d("username : " +username,"id " +id);
+                Log.d("username : " + username, "id " + id);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -175,6 +159,22 @@ public class LoginActivity extends AppCompatActivity {
             isSuccess = false;
         }
 
+    }
+
+    private void newActivity() {
+        if (isSuccess) {
+            sessionManager.createLoginSession(username, id);
+            Intent intent;
+            if ("1".equals(id)) {
+                intent = new Intent(LoginActivity.this, MainActivity.class);
+            } else {
+                intent = new Intent(LoginActivity.this, InstructionActivity.class);
+            }
+            startActivity(intent);
+            finish();
+        } else {
+            notifTxt.setVisibility(View.VISIBLE);
+        }
     }
 
 }

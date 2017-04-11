@@ -6,11 +6,20 @@ package com.hafizzaturrahim.monitoringgilingan.laporan;
 
 public class Report {
 
+    String id;
     String titleReport;
     String dateReport;
     String contentReport;
 
     public Report() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitleReport() {
