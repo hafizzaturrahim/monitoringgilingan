@@ -27,13 +27,15 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/textView">
 
-        <TextView
-            android:id="@+id/txtNoMessage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Tidak ada instruksi yang anda berikan"
-            android:textSize="18sp" />
     </ListView>
+
+    <TextView
+        android:id="@+id/txtNoMessage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="Tidak ada instruksi yang anda berikan"
+        android:textSize="18sp" />
 
 </RelativeLayout>

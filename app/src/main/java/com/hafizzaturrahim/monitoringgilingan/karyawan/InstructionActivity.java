@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class InstructionActivity extends AppCompatActivity {
     ListView listInstruction;
-    ArrayList<Instruction> instructions;
+    ArrayList<Instruction> instructions = new ArrayList<>();;
     SessionManager sessionManager;
     private ProgressDialog pDialog;
     TextView txtNoMsg;
@@ -45,11 +45,11 @@ public class InstructionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instruction);
         sessionManager = new SessionManager(this);
-        instructions = new ArrayList<>();
         pDialog = new ProgressDialog(this);
 
+        listInstruction = (ListView) findViewById(R.id.lvInstruction2);
         txtNoMsg = (TextView) findViewById(R.id.txtNoMessage);
-
+        requestData();
         listInstruction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -59,7 +59,6 @@ public class InstructionActivity extends AppCompatActivity {
                 intent.putExtra("penerima_ins", instructions.get(position).getRecipientInstruction());
                 intent.putExtra("isi_ins", instructions.get(position).getDetailInstruction());
                 intent.putExtra("status_ins", instructions.get(position).getStatusInsruction());
-
                 startActivity(intent);
             }
         });
@@ -94,9 +93,9 @@ public class InstructionActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = "http://192.168.137.1/gilinganlocal/getInstruction.php?id=" +sessionManager.getIdLogin();
+        String url = "http://192.168.137.1/gilinganlocal/getInstruction.php?id=" + sessionManager.getIdLogin();
 
-        Log.d("url : " ,url);
+        Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
@@ -143,9 +142,7 @@ public class InstructionActivity extends AppCompatActivity {
                     ins.setStatusInsruction(insObj.getString("status"));
 
                     instructions.add(ins);
-
                 }
-
 
             } catch (JSONException e) {
                 e.printStackTrace();

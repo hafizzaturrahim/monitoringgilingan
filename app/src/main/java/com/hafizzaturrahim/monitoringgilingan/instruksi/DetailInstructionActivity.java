@@ -5,9 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.hafizzaturrahim.monitoringgilingan.R;
+import com.hafizzaturrahim.monitoringgilingan.SessionManager;
+
+import org.w3c.dom.Text;
 
 public class DetailInstructionActivity extends AppCompatActivity {
 
@@ -16,6 +20,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_instruction);
 
+        SessionManager sessionManager = new SessionManager(this);
         Intent intent = getIntent();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -26,8 +31,11 @@ public class DetailInstructionActivity extends AppCompatActivity {
         TextView txtContent = (TextView) findViewById(R.id.txtContentDetailIns);
         TextView txtStatus = (TextView) findViewById(R.id.txtStatusDetailIns);
 
+        TextView txtColumnSender = (TextView) findViewById(R.id.txtSenderColumn);
 
-        Log.d("stat", intent.getStringExtra("status_ins"));
+        if (sessionManager.getLevel().equals("2")){
+            txtColumnSender.setText("Pengirim");
+        }
 
         txtTitle.setText(intent.getStringExtra("judul_ins"));
         txtRecipient.setText(intent.getStringExtra("penerima_ins"));
@@ -41,6 +49,9 @@ public class DetailInstructionActivity extends AppCompatActivity {
         } else {
             txtStatus.setText("Menunggu konfirmasi");
         }
+
+        Button confirmBtn = (Button) findViewById(R.id.btnConfirm);
+        Button finishBtn = (Button) findViewById(R.id.btnFinish);
     }
 
     @Override

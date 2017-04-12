@@ -29,6 +29,15 @@
                 android:text="Judul" />
 
             <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                android:text="Pengirim" />
+
+            <TextView
+                android:id="@+id/txtSenderColumn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
@@ -62,6 +71,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
+                android:visibility="gone"
+                android:text=" : " />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
                 android:text=" : " />
 
             <TextView
@@ -89,6 +105,14 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
                 android:text="Judul" />
+
+            <TextView
+                android:id="@+id/txtSenderDetailIns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                android:text="Nama pengirim" />
 
             <TextView
                 android:id="@+id/txtRecipientDetailIns"
@@ -127,7 +151,7 @@
             android:theme="@style/ConfirmButton"
             android:id="@+id/btnConfirm"
             android:layout_alignParentBottom="true"
-            android:visibility="gone"/>
+            />
 
         <Button
             android:layout_width="match_parent"
@@ -135,8 +159,32 @@
             android:text="Selesai"
             android:id="@+id/btnFinish"
             android:theme="@style/SuccessButton"
-            android:visibility="gone"
+
             android:layout_alignParentBottom="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Anda hanya dapat membatalkan apabila instruksi masih berstatus belum dikonfirmasi"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Batalkan"
+                android:id="@+id/btnCancel"
+                android:theme="@style/LoginButton"
+                />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
 </LinearLayout>
