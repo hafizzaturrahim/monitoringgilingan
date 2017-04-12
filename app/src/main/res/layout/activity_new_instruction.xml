@@ -12,15 +12,15 @@
     tools:context="com.hafizzaturrahim.monitoringgilingan.instruksi.NewInstructionActivity">
 
     <TextView
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Penerima : " />
 
-    <EditText
-        android:id="@+id/edtNewRecipient"
+
+    <Spinner
+        android:id="@+id/spRecipient"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"></Spinner>
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,10 +48,10 @@
             android:id="@+id/btnConfirmInstruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/LoginButton"
-            android:onClick="confirmInstruction"
             android:layout_alignParentBottom="true"
-            android:text="OK" />
+            android:onClick="confirmInstruction"
+            android:text="OK"
+            android:theme="@style/LoginButton" />
     </RelativeLayout>
 
 

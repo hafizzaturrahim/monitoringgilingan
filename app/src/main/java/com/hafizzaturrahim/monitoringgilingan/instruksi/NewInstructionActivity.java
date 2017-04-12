@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.hafizzaturrahim.monitoringgilingan.MainActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
@@ -19,8 +21,9 @@ public class NewInstructionActivity extends AppCompatActivity {
     Button confirmBtn;
     String penerima;
     String isi;
-
-    EditText edtRecipient, edtContent;
+    String[] recipient;
+    EditText edtContent;
+    Spinner spinRecipient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +31,14 @@ public class NewInstructionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_instruction);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        edtRecipient = (EditText) findViewById(R.id.edtNewRecipient);
         edtContent = (EditText) findViewById(R.id.edtNewInst);
 
         confirmBtn = (Button) findViewById(R.id.btnConfirmInstruction);
+        spinRecipient = (Spinner) findViewById(R.id.spRecipient);
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, recipient);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinRecipient.setAdapter(adapter);
 
     }
 
@@ -49,7 +55,7 @@ public class NewInstructionActivity extends AppCompatActivity {
 
     public void confirmInstruction(View view) {
 
-        penerima = edtRecipient.getText().toString();
+//        penerima = edtRecipient.getText().toString();
         isi = edtContent.getText().toString();
 
 
@@ -58,9 +64,6 @@ public class NewInstructionActivity extends AppCompatActivity {
             intent.putExtra("menu", 3);
             startActivity(intent);
         } else {
-            if (penerima.equals("")) {
-                edtRecipient.setError("Kolom harus diisi");
-            }
             if (isi.equals("")) {
                 edtContent.setError("Kolom harus diisi");
             }
