@@ -1,11 +1,14 @@
 package com.hafizzaturrahim.monitoringgilingan.instruksi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hafizzaturrahim.monitoringgilingan.R;
@@ -21,6 +24,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_instruction);
 
         SessionManager sessionManager = new SessionManager(this);
+        String level = sessionManager.getLevel();
         Intent intent = getIntent();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -33,9 +37,41 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
         TextView txtColumnSender = (TextView) findViewById(R.id.txtSenderColumn);
 
-        if (sessionManager.getLevel().equals("2")){
+        Button cancelBtn = (Button) findViewById(R.id.btnCancel);
+        Button confirmBtn = (Button) findViewById(R.id.btnConfirm);
+        Button finishBtn = (Button) findViewById(R.id.btnFinish);
+        LinearLayout cancelLayout = (LinearLayout) findViewById(R.id.cancelLayout);
+
+        if (level.equals("2")) {
             txtColumnSender.setText("Pengirim");
+            finishBtn.setVisibility(View.VISIBLE);
+            confirmBtn.setVisibility(View.VISIBLE);
+        } else {
+            if (intent.getStringExtra("status_ins").equals("1")) {
+                cancelLayout.setVisibility(View.VISIBLE);
+            }
         }
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        finishBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         txtTitle.setText(intent.getStringExtra("judul_ins"));
         txtRecipient.setText(intent.getStringExtra("penerima_ins"));
@@ -48,10 +84,10 @@ public class DetailInstructionActivity extends AppCompatActivity {
             txtStatus.setText("Dikonfirmasi");
         } else {
             txtStatus.setText("Menunggu konfirmasi");
+            txtStatus.setTextColor(0xFFFF3300);
         }
 
-        Button confirmBtn = (Button) findViewById(R.id.btnConfirm);
-        Button finishBtn = (Button) findViewById(R.id.btnFinish);
+
     }
 
     @Override
