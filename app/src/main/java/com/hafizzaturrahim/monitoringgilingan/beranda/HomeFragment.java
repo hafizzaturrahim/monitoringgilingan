@@ -32,7 +32,17 @@ import org.w3c.dom.Text;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
+import lecho.lib.hellocharts.model.Column;
+import lecho.lib.hellocharts.model.ColumnChartData;
+import lecho.lib.hellocharts.model.SubcolumnValue;
+import lecho.lib.hellocharts.util.ChartUtils;
+import lecho.lib.hellocharts.view.ColumnChartView;
 
 
 /**
@@ -41,8 +51,12 @@ import java.util.Date;
 public class HomeFragment extends Fragment {
     private ProgressDialog pDialog;
 
-//    String tgl,ccr1,ccr2,lvl_bologne,flow_imb,temp_imb,level_imb;
-    TextView txtTgl,txtCcr1,txtCcr2,txtLvl_bologne,txtFlow_imb,txtTemp_imb,txtLevel_imb;
+    private ColumnChartView chart;
+    private ColumnChartData data;
+
+    String tgl, ccr1, ccr2, lvl_bologne, flow_imb, temp_imb, level_imb;
+    int[] speed, oil, nozzle;
+    TextView txtTgl, txtCcr1, txtCcr2, txtLvl_bologne, txtFlow_imb, txtTemp_imb, txtLevel_imb;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -63,23 +77,29 @@ public class HomeFragment extends Fragment {
         txtFlow_imb = (TextView) rowView.findViewById(R.id.txtflow);
         txtTemp_imb = (TextView) rowView.findViewById(R.id.txttemp);
 
+        //set column chart
+        chart = (ColumnChartView) rowView.findViewById(R.id.chartBar);
+        chart.startDataAnimation();
+        chart.setZoomEnabled(!chart.isZoomEnabled());
+//        chart.setOnValueTouchListener(new ValueTouchListener());
+
         requestData();
         return rowView;
 
     }
 
     private void requestData() {
-
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url+ "/getCurrentPeformance.php";
+        String url = Config.base_url + "/getCurrentPeformance.php";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("response", response);
                         parseJSON(response);
+                        generateData();
                         pDialog.dismiss();
 
                     }
@@ -99,37 +119,6 @@ public class HomeFragment extends Fragment {
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        pDialog.dismiss();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        String body = null;
-//                        //get status code here
-//                        String statusCode = String.valueOf(error.networkResponse.statusCode);
-//                        //get response body and parse with appropriate encoding
-//                        if(error.networkResponse.data!=null) {
-//                            try {
-//                                body = new String(error.networkResponse.data,"UTF-8");
-//                            } catch (UnsupportedEncodingException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-////                        Toast.makeText(getActivity(), "Error " +statusCode+ " message " +body, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//        //add request to queue
-//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-//        requestQueue.add(jsonObjectRequest);
-
-
-
     }
 
     private void parseJSON(String result) {
@@ -140,8 +129,8 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i < dataAr.length(); i++) {
                     JSONObject reportObj = dataAr.getJSONObject(i);
 
-                    String tgl = convertDate(reportObj.getString("tgl"));
-                    txtTgl.setText("Last update " +tgl);
+                    tgl = convertDate(reportObj.getString("tgl"));
+                    txtTgl.setText("Last update " + tgl);
                     txtCcr1.setText(reportObj.getString("ccr1"));
                     txtCcr2.setText(reportObj.getString("ccr2"));
                     txtTemp_imb.setText(reportObj.getString("temp_imb"));
@@ -154,13 +143,11 @@ public class HomeFragment extends Fragment {
             }
 
         } else {
-
+            Toast.makeText(getActivity(), "Tidak bisa mendapat data, coba lagi", Toast.LENGTH_SHORT).show();
         }
-
     }
 
-
-    private String convertDate(String oldDate){
+    private String convertDate(String oldDate) {
         String newDate = null;
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat formatter = new SimpleDateFormat(pattern);
@@ -173,6 +160,48 @@ public class HomeFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return  newDate;
+        return newDate;
+    }
+
+    private void generateData() {
+        int numColumns = 4;
+        String[] label = new String[]{"Gilingan 3", "Gilingan 4", "Gilingan 5", "Cane Cutter"};
+        int[] color = new int[]{ChartUtils.COLOR_BLUE,ChartUtils.COLOR_GREEN,ChartUtils.COLOR_ORANGE,ChartUtils.COLOR_RED};
+
+        speed = new int[]{6, 2, 10, 6};
+        // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
+        List<Column> columns = new ArrayList<Column>();
+        List<AxisValue> axisValues = new ArrayList<AxisValue>();
+        List<SubcolumnValue> values;
+        for (int i = 0; i < numColumns; ++i) {
+
+            values = new ArrayList<>();
+            values.add(new SubcolumnValue(speed[i],color[i]));
+            axisValues.add(new AxisValue(i).setLabel(label[i]));
+
+            Column column = new Column(values);
+            column.setHasLabels(true);
+            column.setHasLabelsOnlyForSelected(false);
+
+            columns.add(column);
+        }
+
+        data = new ColumnChartData(columns);
+        data.setAxisXBottom(new Axis(axisValues).setHasLines(true));
+
+        boolean hasAxes = true;
+
+
+        if (hasAxes) {
+//            Axis axisX = new Axis();
+            Axis axisY = new Axis().setHasLines(true);
+            data.setAxisYLeft(axisY);
+        } else {
+            data.setAxisXBottom(null);
+            data.setAxisYLeft(null);
+        }
+
+        chart.setColumnChartData(data);
+
     }
 }
