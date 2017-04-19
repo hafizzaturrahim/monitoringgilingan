@@ -4,6 +4,7 @@ package com.hafizzaturrahim.monitoringgilingan.beranda;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.R;
+import com.hafizzaturrahim.monitoringgilingan.laporan.Report;
+import com.hafizzaturrahim.monitoringgilingan.laporan.ReportAdapter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -29,6 +35,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class HomeFragment extends Fragment {
     private ProgressDialog pDialog;
+
+    String tgl,ccr1,ccr2,lvl_bologne,flow_imb,temp_imb,level_imb;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -53,35 +61,90 @@ public class HomeFragment extends Fragment {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Malang&units=metric&cnt=6&APPID=a4f161b4c56a2e0a250cf9c5ecf892b8";
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
+        String url = Config.base_url+ "/getCurrentPeformance.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        parseJSON(response);
                         pDialog.dismiss();
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String body = null;
-                        //get status code here
-                        String statusCode = String.valueOf(error.networkResponse.statusCode);
-                        //get response body and parse with appropriate encoding
-                        if(error.networkResponse.data!=null) {
-                            try {
-                                body = new String(error.networkResponse.data,"UTF-8");
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
-                            }
+                        pDialog.dismiss();
+
+                        if (error != null) {
+                            error.printStackTrace();
+
                         }
-//                        Toast.makeText(getActivity(), "Error " +statusCode+ " message " +body, Toast.LENGTH_SHORT).show();
                     }
                 });
+
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(stringRequest);
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                        pDialog.dismiss();
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        String body = null;
+//                        //get status code here
+//                        String statusCode = String.valueOf(error.networkResponse.statusCode);
+//                        //get response body and parse with appropriate encoding
+//                        if(error.networkResponse.data!=null) {
+//                            try {
+//                                body = new String(error.networkResponse.data,"UTF-8");
+//                            } catch (UnsupportedEncodingException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+////                        Toast.makeText(getActivity(), "Error " +statusCode+ " message " +body, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        //add request to queue
+//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//        requestQueue.add(jsonObjectRequest);
+
+
+
+    }
+
+    private void parseJSON(String result) {
+        if (!result.contains("gagal")) {
+            try {
+                JSONObject data = new JSONObject(result);
+                JSONArray dataAr = data.getJSONArray("data");
+                for (int i = 0; i < dataAr.length(); i++) {
+                    JSONObject reportObj = dataAr.getJSONObject(i);
+
+//                    Report report = new Report();
+//                    report.setId(reportObj.getString("id_laporan"));
+//                    report.setTitleReport(reportObj.getString("judul_laporan"));
+//                    report.setContentReport(reportObj.getString("detail_laporan"));
+//                    report.setDateReport(reportObj.getString("tgl"));
+//                    reports.add(report);
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+
+        }
 
     }
 }

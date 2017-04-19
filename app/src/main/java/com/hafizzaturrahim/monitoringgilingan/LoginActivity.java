@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = "http://192.168.137.1/gilinganlocal/login.php?name=" + username + "&pass=" + password;
+        String url = Config.base_url+ "/login.php?name=" + username + "&pass=" + password;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

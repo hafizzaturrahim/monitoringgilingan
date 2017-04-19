@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.LoginActivity;
 import com.hafizzaturrahim.monitoringgilingan.MainActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
@@ -93,7 +94,7 @@ public class InstructionActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = "http://192.168.137.1/gilinganlocal/getInstruction.php?id=" + sessionManager.getIdLogin();
+        String url = Config.base_url+ "/getInstruction.php?id=" + sessionManager.getIdLogin();
 
         Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
