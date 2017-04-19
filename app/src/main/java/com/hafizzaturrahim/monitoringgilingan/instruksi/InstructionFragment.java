@@ -96,7 +96,7 @@ public class InstructionFragment extends Fragment {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin();
+        String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin()+ "&level=" +sessionManager.getLevel();
 
         Log.d("url : " ,url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
