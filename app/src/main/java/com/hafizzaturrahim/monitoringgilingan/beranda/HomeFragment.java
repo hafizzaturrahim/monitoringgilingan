@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -26,8 +27,12 @@ import com.hafizzaturrahim.monitoringgilingan.laporan.ReportAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -36,7 +41,8 @@ import java.io.UnsupportedEncodingException;
 public class HomeFragment extends Fragment {
     private ProgressDialog pDialog;
 
-    String tgl,ccr1,ccr2,lvl_bologne,flow_imb,temp_imb,level_imb;
+//    String tgl,ccr1,ccr2,lvl_bologne,flow_imb,temp_imb,level_imb;
+    TextView txtTgl,txtCcr1,txtCcr2,txtLvl_bologne,txtFlow_imb,txtTemp_imb,txtLevel_imb;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -50,6 +56,12 @@ public class HomeFragment extends Fragment {
         View rowView = inflater.inflate(R.layout.fragment_home, container, false);
 
         pDialog = new ProgressDialog(getActivity());
+
+        txtTgl = (TextView) rowView.findViewById(R.id.txttgl);
+        txtCcr1 = (TextView) rowView.findViewById(R.id.txtccr1);
+        txtCcr2 = (TextView) rowView.findViewById(R.id.txtccr2);
+        txtFlow_imb = (TextView) rowView.findViewById(R.id.txtflow);
+        txtTemp_imb = (TextView) rowView.findViewById(R.id.txttemp);
 
         requestData();
         return rowView;
@@ -128,13 +140,12 @@ public class HomeFragment extends Fragment {
                 for (int i = 0; i < dataAr.length(); i++) {
                     JSONObject reportObj = dataAr.getJSONObject(i);
 
-//                    Report report = new Report();
-//                    report.setId(reportObj.getString("id_laporan"));
-//                    report.setTitleReport(reportObj.getString("judul_laporan"));
-//                    report.setContentReport(reportObj.getString("detail_laporan"));
-//                    report.setDateReport(reportObj.getString("tgl"));
-//                    reports.add(report);
-
+                    String tgl = convertDate(reportObj.getString("tgl"));
+                    txtTgl.setText("Last update " +tgl);
+                    txtCcr1.setText(reportObj.getString("ccr1"));
+                    txtCcr2.setText(reportObj.getString("ccr2"));
+                    txtTemp_imb.setText(reportObj.getString("temp_imb"));
+                    txtFlow_imb.setText(reportObj.getString("flow_imb"));
                 }
 
 
@@ -146,5 +157,22 @@ public class HomeFragment extends Fragment {
 
         }
 
+    }
+
+
+    private String convertDate(String oldDate){
+        String newDate = null;
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+
+        try {
+            Date date = formatter.parse(oldDate);
+            SimpleDateFormat newFormatter = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
+            newDate = newFormatter.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  newDate;
     }
 }
