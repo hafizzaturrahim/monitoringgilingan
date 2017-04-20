@@ -54,6 +54,9 @@ public class HomeFragment extends Fragment {
     private ColumnChartView chart;
     private ColumnChartData data;
 
+    private ColumnChartView chart2;
+    private ColumnChartData data2;
+
     String tgl, ccr1, ccr2, lvl_bologne, flow_imb, temp_imb, level_imb;
     int[] speed, oil, nozzle;
     TextView txtTgl, txtCcr1, txtCcr2, txtLvl_bologne, txtFlow_imb, txtTemp_imb, txtLevel_imb;
@@ -76,6 +79,7 @@ public class HomeFragment extends Fragment {
         txtCcr2 = (TextView) rowView.findViewById(R.id.txtccr2);
         txtFlow_imb = (TextView) rowView.findViewById(R.id.txtflow);
         txtTemp_imb = (TextView) rowView.findViewById(R.id.txttemp);
+        txtLevel_imb = (TextView) rowView.findViewById(R.id.txtlevel);
 
         //set column chart
         chart = (ColumnChartView) rowView.findViewById(R.id.chartBar);
@@ -133,8 +137,16 @@ public class HomeFragment extends Fragment {
                     txtTgl.setText("Last update " + tgl);
                     txtCcr1.setText(reportObj.getString("ccr1"));
                     txtCcr2.setText(reportObj.getString("ccr2"));
-                    txtTemp_imb.setText(reportObj.getString("temp_imb"));
+                    String degree = "\u2103";
+                    txtTemp_imb.setText(reportObj.getString("temp_imb")+ " " +degree);
                     txtFlow_imb.setText(reportObj.getString("flow_imb"));
+                    txtLevel_imb.setText(reportObj.getString("level_imb"));
+
+                    speed = new int[]{
+                            Integer.parseInt(reportObj.getString("speed_gil3")),
+                            Integer.parseInt(reportObj.getString("speed_gil4")),
+                            Integer.parseInt(reportObj.getString("speed_gil5"))
+                    };
                 }
 
 
@@ -147,28 +159,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private String convertDate(String oldDate) {
-        String newDate = null;
-        String pattern = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-
-        try {
-            Date date = formatter.parse(oldDate);
-            SimpleDateFormat newFormatter = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
-            newDate = newFormatter.format(date);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return newDate;
-    }
-
     private void generateData() {
-        int numColumns = 4;
-        String[] label = new String[]{"Gilingan 3", "Gilingan 4", "Gilingan 5", "Cane Cutter"};
+        int numColumns = 3;
+        String[] label = new String[]{"Gilingan 3", "Gilingan 4", "Gilingan 5"};
         int[] color = new int[]{ChartUtils.COLOR_BLUE,ChartUtils.COLOR_GREEN,ChartUtils.COLOR_ORANGE,ChartUtils.COLOR_RED};
 
-        speed = new int[]{6, 2, 10, 6};
         // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
         List<Column> columns = new ArrayList<Column>();
         List<AxisValue> axisValues = new ArrayList<AxisValue>();
@@ -189,19 +184,28 @@ public class HomeFragment extends Fragment {
         data = new ColumnChartData(columns);
         data.setAxisXBottom(new Axis(axisValues).setHasLines(true));
 
-        boolean hasAxes = true;
-
-
-        if (hasAxes) {
-//            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
-            data.setAxisYLeft(axisY);
-        } else {
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(null);
-        }
+        Axis axisY = new Axis().setHasLines(true);
+        data.setAxisYLeft(axisY);
 
         chart.setColumnChartData(data);
 
     }
+
+    private String convertDate(String oldDate) {
+        String newDate = null;
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+
+        try {
+            Date date = formatter.parse(oldDate);
+            SimpleDateFormat newFormatter = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
+            newDate = newFormatter.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return newDate;
+    }
+
+
 }

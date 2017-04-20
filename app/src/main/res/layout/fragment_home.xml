@@ -132,6 +132,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
+                        android:orientation="vertical"
                         android:padding="4dp">
 
                         <TextView
@@ -139,6 +140,15 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:text="Level" />
+
+                        <TextView
+                            android:id="@+id/txtlevel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:paddingTop="4dp"
+                            android:text="3"
+                            android:textSize="26sp" />
 
                     </LinearLayout>
 

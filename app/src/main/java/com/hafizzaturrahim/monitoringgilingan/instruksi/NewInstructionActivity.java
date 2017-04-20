@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,8 +14,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.MainActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class NewInstructionActivity extends AppCompatActivity {
 
@@ -69,7 +81,73 @@ public class NewInstructionActivity extends AppCompatActivity {
             }
         }
 
-
     }
+
+//    private void requestData() {
+//        pDialog.setMessage("Memproses Data...");
+//        pDialog.show();
+//        /*Json Request*/
+//        String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin()+ "&level=" +sessionManager.getLevel();
+//
+//        Log.d("url : " ,url);
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d("response", response);
+//                        parseJSON(response);
+//                        InstructionAdapter adapter = new InstructionAdapter(getActivity(), instructions);
+//                        listInstruction.setAdapter(adapter);
+//                        pDialog.dismiss();
+//
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        pDialog.dismiss();
+//
+//                        if (error != null) {
+//                            error.printStackTrace();
+//
+//                        }
+//                    }
+//                });
+//
+//        //add request to queue
+//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+//        requestQueue.add(stringRequest);
+//
+//    }
+//
+//    private void parseJSON(String result) {
+//        if (!result.contains("gagal")) {
+//            try {
+//                JSONObject data = new JSONObject(result);
+//                JSONArray dataAr = data.getJSONArray("data");
+//                for (int i = 0; i < dataAr.length(); i++) {
+//                    JSONObject insObj = dataAr.getJSONObject(i);
+//
+//                    Instruction ins = new Instruction();
+//                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));
+//                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
+//                    ins.setRecipientInstruction(insObj.getString("username"));
+//                    ins.setDateInstruction(insObj.getString("tgl"));
+//                    ins.setStatusInsruction(insObj.getString("status"));
+//
+//                    instructions.add(ins);
+//
+//                }
+//
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//        } else {
+//            txtNoMsg.setVisibility(View.VISIBLE);
+//        }
+//
+//    }
 
 }

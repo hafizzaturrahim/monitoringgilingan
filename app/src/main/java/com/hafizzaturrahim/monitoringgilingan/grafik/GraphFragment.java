@@ -2,11 +2,13 @@ package com.hafizzaturrahim.monitoringgilingan.grafik;
 
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,21 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.R;
+import com.hafizzaturrahim.monitoringgilingan.SessionManager;
+import com.hafizzaturrahim.monitoringgilingan.instruksi.Instruction;
+import com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,6 +67,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     // 4 = jam berakhir
     String[] selectedInput = new String[5];
 
+    private ProgressDialog pDialog;
+    SessionManager sessionManager;
     public GraphFragment() {
         // Required empty public constructor
     }
@@ -61,8 +79,23 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rowView = inflater.inflate(R.layout.fragment_graph, container, false);
+        sessionManager = new SessionManager(getActivity());
+        pDialog = new ProgressDialog(getActivity());
 
         Spinner spinnerParam = (Spinner) rowView.findViewById(R.id.spParam);
+        Parameter[] parameters = {
+                new Parameter("Speed Gilingan 4", "speed_gil4"),
+                new Parameter("CCR 1","ccr1"),
+                new Parameter("CCR 2","ccr2"),
+                new Parameter("RPM Imc 1", "rpm_imc1"),
+                new Parameter("RPM Imc 2", "rpm_imc2"),
+                new Parameter("RPM Imc 3", "rpm_imc3"),
+                new Parameter("RPM Imc 4", "rpm_imc4"),
+                new Parameter("Flow Imb", "flow_imb"),
+                new Parameter("Temperature Imb", "temp_imb"),
+                new Parameter("Level Imb", "level_imb")
+        };
+
         spinnerParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
@@ -83,23 +116,19 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         mulaiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (selectedInput[1].equals("") || selectedInput[2].equals("") || selectedInput[3].equals("") || selectedInput[4].equals("")) {
-//                    String notif = "Wajib diisi";
-//                    if (selectedInput[1].equals("")) {
-//                        fromDateEtxt.setError(notif);
-//                    }
-//                    if (selectedInput[2].equals("")) {
-//                        toDateEtxt.setError(notif);
-//                    }
-//                    if (selectedInput[3].equals("")) {
-//                        fromTimeExt.setError(notif);
-//                    }
-//                    if (selectedInput[4].equals("")) {
-//                        toTimeExt.setError(notif);
-//                    }
-//                } else {
-//
-//                }
+                String notif = "Wajib diisi";
+                if ("".equals(selectedInput[1])) {
+                    fromDateEtxt.setError(notif);
+                }
+                if ("".equals(selectedInput[2])) {
+                    toDateEtxt.setError(notif);
+                }
+                if ("".equals(selectedInput[3])) {
+                    fromTimeExt.setError(notif);
+                }
+                if ("".equals(selectedInput[4])) {
+                    toTimeExt.setError(notif);
+                }
                 Intent intent = new Intent(getActivity(), ChartActivity.class);
                 intent.putExtra("input", selectedInput);
                 startActivity(intent);
@@ -121,7 +150,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         toTimeExt.setInputType(InputType.TYPE_NULL);
 
         dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        timeFormatter = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        timeFormatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
         setDateTimeField();
         return rowView;
@@ -191,6 +220,71 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         } else if (v == toTimeExt) {
             toTimePickerDialog.show();
         }
+    }
+
+    private void requestData() {
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
+        /*Json Request*/
+        String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin()+ "&level=" +sessionManager.getLevel();
+
+        Log.d("url : " ,url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        parseJSON(response);
+
+                        pDialog.dismiss();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                });
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void parseJSON(String result) {
+        if (!result.contains("gagal")) {
+            try {
+                JSONObject data = new JSONObject(result);
+                JSONArray dataAr = data.getJSONArray("data");
+                for (int i = 0; i < dataAr.length(); i++) {
+                    JSONObject insObj = dataAr.getJSONObject(i);
+
+                    Instruction ins = new Instruction();
+                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));
+                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
+                    ins.setRecipientInstruction(insObj.getString("username"));
+                    ins.setDateInstruction(insObj.getString("tgl"));
+                    ins.setStatusInsruction(insObj.getString("status"));
+
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+
+        }
+
     }
 
 }
