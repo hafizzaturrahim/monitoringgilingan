@@ -69,6 +69,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
 
     private ProgressDialog pDialog;
     SessionManager sessionManager;
+
     public GraphFragment() {
         // Required empty public constructor
     }
@@ -85,8 +86,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         Spinner spinnerParam = (Spinner) rowView.findViewById(R.id.spParam);
         Parameter[] parameters = {
                 new Parameter("Speed Gilingan 4", "speed_gil4"),
-                new Parameter("CCR 1","ccr1"),
-                new Parameter("CCR 2","ccr2"),
+                new Parameter("CCR 1", "ccr1"),
+                new Parameter("CCR 2", "ccr2"),
                 new Parameter("RPM Imc 1", "rpm_imc1"),
                 new Parameter("RPM Imc 2", "rpm_imc2"),
                 new Parameter("RPM Imc 3", "rpm_imc3"),
@@ -95,12 +96,15 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 new Parameter("Temperature Imb", "temp_imb"),
                 new Parameter("Level Imb", "level_imb")
         };
+        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getActivity(), android.R.layout.simple_spinner_item, parameters);
+        spinnerParam.setAdapter(adapter);
 
         spinnerParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                selectedInput[0] = parentView.getItemAtPosition(position).toString();
+                Parameter selected = (Parameter) (parentView.getItemAtPosition(position));
+                selectedInput[0] = String.valueOf(selected.getValue());
 //                Toast.makeText(getActivity(), "The planet is " +
 //                        selectedInput[0], Toast.LENGTH_SHORT).show();
             }
@@ -113,26 +117,32 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         });
 
         mulaiBtn = (Button) rowView.findViewById(R.id.btnMulai);
+
         mulaiBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String notif = "Wajib diisi";
-                if ("".equals(selectedInput[1])) {
-                    fromDateEtxt.setError(notif);
-                }
-                if ("".equals(selectedInput[2])) {
-                    toDateEtxt.setError(notif);
-                }
-                if ("".equals(selectedInput[3])) {
-                    fromTimeExt.setError(notif);
-                }
-                if ("".equals(selectedInput[4])) {
-                    toTimeExt.setError(notif);
-                }
-                Intent intent = new Intent(getActivity(), ChartActivity.class);
-                intent.putExtra("input", selectedInput);
-                startActivity(intent);
 
+                if (selectedInput[1] == null || selectedInput[2] == null) {
+                    if (selectedInput[1] == null) {
+                        fromDateEtxt.setError(notif);
+                    }
+                    if (selectedInput[2] == null) {
+                        toDateEtxt.setError(notif);
+                    }
+//                    if (selectedInput[3] == null) {
+//                        fromTimeExt.setError(notif);
+//                    }
+//                    if (selectedInput[4] == null) {
+//                        toTimeExt.setError(notif);
+//                    }
+                } else {
+                    Toast.makeText(getActivity(), "input " +selectedInput[1], Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(getActivity(), ChartActivity.class);
+//                    intent.putExtra("input", selectedInput);
+//                    startActivity(intent);
+
+                }
             }
         });
 
@@ -149,7 +159,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         toTimeExt = (EditText) rowView.findViewById(R.id.etxt_totime);
         toTimeExt.setInputType(InputType.TYPE_NULL);
 
-        dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         timeFormatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 
         setDateTimeField();
@@ -226,9 +236,9 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin()+ "&level=" +sessionManager.getLevel();
+        String url = Config.base_url + "/getInstruction.php?id=" + sessionManager.getIdLogin() + "&level=" + sessionManager.getLevel();
 
-        Log.d("url : " ,url);
+        Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override

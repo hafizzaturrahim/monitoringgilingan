@@ -10,13 +10,13 @@ import android.widget.TextView;
  * Created by PC-34 on 4/20/2017.
  */
 
-public class SpinnerAdapter extends ArrayAdapter<Parameter> {
+public class CustomSpinnerAdapter extends ArrayAdapter<Parameter> {
 
     private Context context;
     private Parameter[] params;
 
-    public SpinnerAdapter(Context context, int textViewResourceId,
-                            Parameter[] params) {
+    public CustomSpinnerAdapter(Context context, int textViewResourceId,
+                                Parameter[] params) {
         super(context, textViewResourceId, params);
         this.context = context;
         this.params = params;
@@ -37,7 +37,7 @@ public class SpinnerAdapter extends ArrayAdapter<Parameter> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView label = new TextView(context);
-        label.setText(params[position].getValue());
+        label.setText(params[position].getName());
         return label;
     }
 
