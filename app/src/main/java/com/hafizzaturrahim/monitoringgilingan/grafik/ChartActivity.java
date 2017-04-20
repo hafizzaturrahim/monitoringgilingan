@@ -1,19 +1,37 @@
 package com.hafizzaturrahim.monitoringgilingan.grafik;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.R;
+import com.hafizzaturrahim.monitoringgilingan.SessionManager;
+import com.hafizzaturrahim.monitoringgilingan.instruksi.Instruction;
+import com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lecho.lib.hellocharts.listener.LineChartOnValueSelectListener;
 import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
@@ -27,35 +45,32 @@ import static android.R.attr.theme;
 public class ChartActivity extends AppCompatActivity {
     private LineChartView chart;
     private LineChartData data;
-    private int numberOfLines = 1;
     private int maxNumberOfLines = 4;
-    private int numberOfPoints = 12;
+    private int numberOfPoints;
 
-    float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
+    String[] label;
+    float[] numbersTab;
 
     private boolean hasAxes = true;
     private boolean hasAxesNames = true;
-    private boolean hasLines = true;
-    private boolean hasPoints = true;
-    private ValueShape shape = ValueShape.CIRCLE;
-    private boolean isFilled = false;
-    private boolean hasLabels = false;
-    private boolean isCubic = false;
-    private boolean hasLabelForSelected = false;
-    private boolean pointsHaveDifferentColor;
-    private boolean hasGradientToTransparent = false;
 
     String dataInput[] = new String[5];
+
+    private ProgressDialog pDialog;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         dataInput = intent.getStringArrayExtra("input");
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         setContentView(R.layout.activity_chart);
+
+        pDialog = new ProgressDialog(this);
+        sessionManager = new SessionManager(this);
+
+        Toast.makeText(this, "1 : " + dataInput[0] + " 2 : " + dataInput[1] + " 3 : " + dataInput[2] + " 4 : " + dataInput[3] + " 5: " + dataInput[4], Toast.LENGTH_LONG).show();
         chart = (LineChartView) findViewById(R.id.chart);
         chart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
@@ -68,9 +83,8 @@ public class ChartActivity extends AppCompatActivity {
 
             }
         });
+        requestData();
 
-        generateValues();
-        generateData();
     }
 
     @Override
@@ -87,26 +101,27 @@ public class ChartActivity extends AppCompatActivity {
 
     private void generateData() {
         List<Line> lines = new ArrayList<Line>();
-        for (int i = 0; i < numberOfLines; ++i) {
+        List<AxisValue> axisValues = new ArrayList<AxisValue>();
+        List<PointValue> values = new ArrayList<PointValue>();
 
-            List<PointValue> values = new ArrayList<PointValue>();
-            for (int j = 0; j < numberOfPoints; ++j) {
-                values.add(new PointValue(j, randomNumbersTab[i][j]));
-            }
+        for (int i = 0; i < numberOfPoints; ++i) {
+            values.add(new PointValue(i, numbersTab[i]));
+            axisValues.add(new AxisValue(i).setLabel(label[i]));
+        }
 
-            Line line = new Line(values);
-            line.setColor(ChartUtils.COLORS[i]);
-            line.setShape(shape);
-            line.setCubic(isCubic);
-            line.setFilled(isFilled);
-            line.setHasLabels(hasLabels);
-            line.setHasLabelsOnlyForSelected(hasLabelForSelected);
-            line.setHasLines(hasLines);
-            line.setHasPoints(hasPoints);
+        Line line = new Line(values);
+        line.setColor(ChartUtils.COLOR_GREEN);
+        line.setShape(ValueShape.CIRCLE);
+        line.setCubic(false);
+        line.setFilled(false);
+        line.setHasLabels(false);
+        line.setHasLabelsOnlyForSelected(false);
+        line.setHasLines(true);
+        line.setHasPoints(true);
 //            line.setHasGradientToTransparent(hasGradientToTransparent);
 
-            lines.add(line);
-        }
+        lines.add(line);
+
 
         data = new LineChartData(lines);
 
@@ -114,10 +129,10 @@ public class ChartActivity extends AppCompatActivity {
             Axis axisX = new Axis();
             Axis axisY = new Axis().setHasLines(true);
             if (hasAxesNames) {
-                axisX.setName("Axis X");
-                axisY.setName("Axis Y");
+                axisX.setName("Tanggal");
+                axisY.setName(dataInput[5]);
             }
-            data.setAxisXBottom(axisX);
+            data.setAxisXBottom(new Axis(axisValues).setHasLines(true));
             data.setAxisYLeft(axisY);
         } else {
             data.setAxisXBottom(null);
@@ -130,24 +145,74 @@ public class ChartActivity extends AppCompatActivity {
 
     }
 
-    private void generateValues() {
-        for (int i = 0; i < maxNumberOfLines; ++i) {
-            for (int j = 0; j < numberOfPoints; ++j) {
-                randomNumbersTab[i][j] = (float) Math.random() * 100f;
-            }
-        }
+    private void requestData() {
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
+        /*Json Request*/
+        String star_date = dataInput[1] + "%20" + dataInput[3];
+        String end_date = dataInput[2] + "%20" + dataInput[4];
+        String url = Config.base_url + "/getPeformance.php?param=" + dataInput[0] + "&start=" + star_date + "&stop=" + end_date;
+
+        Log.d("url : ", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        parseJSON(response);
+                        generateData();
+                        pDialog.dismiss();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                });
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
     }
 
-    private class ValueTouchListener implements LineChartOnValueSelectListener {
+    private void parseJSON(String result) {
+        if (!result.contains("gagal")) {
+            try {
+                JSONObject data = new JSONObject(result);
+                JSONArray dataAr = data.getJSONArray("data");
+                numberOfPoints = dataAr.length();
+                numbersTab = new float[numberOfPoints];
+                label = new String[numberOfPoints];
 
-        @Override
-        public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
-            Toast.makeText(ChartActivity.this, "Selected: " + value, Toast.LENGTH_SHORT).show();
-        }
+                for (int i = 0; i < dataAr.length(); i++) {
+                    JSONObject Obj = dataAr.getJSONObject(i);
+                    numbersTab[i] = Float.parseFloat(Obj.getString(dataInput[0]));
+                    label[i] =Obj.getString("tgl");
+//                    Log.d("numberstab "+i, String.valueOf(numbersTab[i]));
+//                    Instruction ins = new Instruction();
+//                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));
+//                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
+//                    ins.setRecipientInstruction(insObj.getString("username"));
+//                    ins.setDateInstruction(insObj.getString("tgl"));
+//                    ins.setStatusInsruction(insObj.getString("status"));
 
-        @Override
-        public void onValueDeselected() {
-            // TODO Auto-generated method stub
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
 
         }
 

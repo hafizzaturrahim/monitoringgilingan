@@ -65,7 +65,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     // 2 = tanggal berakhir
     // 3 = jam mulai
     // 4 = jam berakhir
-    String[] selectedInput = new String[5];
+    // 5 = nama asli parameter
+    String[] selectedInput = new String[6];
 
     private ProgressDialog pDialog;
     SessionManager sessionManager;
@@ -105,6 +106,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 // your code here
                 Parameter selected = (Parameter) (parentView.getItemAtPosition(position));
                 selectedInput[0] = String.valueOf(selected.getValue());
+                selectedInput[5] = String.valueOf(selected.getName());
 //                Toast.makeText(getActivity(), "The planet is " +
 //                        selectedInput[0], Toast.LENGTH_SHORT).show();
             }
@@ -137,10 +139,10 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
 //                        toTimeExt.setError(notif);
 //                    }
                 } else {
-                    Toast.makeText(getActivity(), "input " +selectedInput[1], Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(getActivity(), ChartActivity.class);
-//                    intent.putExtra("input", selectedInput);
-//                    startActivity(intent);
+//                    Toast.makeText(getActivity(), "input " +selectedInput[1], Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), ChartActivity.class);
+                    intent.putExtra("input", selectedInput);
+                    startActivity(intent);
 
                 }
             }
