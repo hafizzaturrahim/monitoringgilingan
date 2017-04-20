@@ -1,5 +1,6 @@
 package com.hafizzaturrahim.monitoringgilingan.instruksi;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,21 +23,33 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.Config;
+import com.hafizzaturrahim.monitoringgilingan.CustomSpinnerAdapter;
+import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
 import com.hafizzaturrahim.monitoringgilingan.MainActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
+import com.hafizzaturrahim.monitoringgilingan.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class NewInstructionActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+public class NewInstructionActivity extends AppCompatActivity {
+    private ProgressDialog pDialog;
     Button confirmBtn;
     String penerima;
     String isi;
-    String[] recipient;
+
+    ItemSpinner[] recipient;
     EditText edtContent;
     Spinner spinRecipient;
+
+
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +57,29 @@ public class NewInstructionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_instruction);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        edtContent = (EditText) findViewById(R.id.edtNewInst);
+        sessionManager = new SessionManager(this);
 
+        edtContent = (EditText) findViewById(R.id.edtNewInst);
+        pDialog = new ProgressDialog(this);
         confirmBtn = (Button) findViewById(R.id.btnConfirmInstruction);
         spinRecipient = (Spinner) findViewById(R.id.spRecipient);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, recipient);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinRecipient.setAdapter(adapter);
+        spinRecipient.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                ItemSpinner selected = (ItemSpinner) (parentView.getItemAtPosition(position));
+                penerima = String.valueOf(selected.getValue());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
+        requestData();
 
     }
 
@@ -66,10 +95,7 @@ public class NewInstructionActivity extends AppCompatActivity {
     }
 
     public void confirmInstruction(View view) {
-
-//        penerima = edtRecipient.getText().toString();
         isi = edtContent.getText().toString();
-
 
         if (!penerima.equals("") && !isi.equals("")) {
             Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
@@ -83,71 +109,103 @@ public class NewInstructionActivity extends AppCompatActivity {
 
     }
 
-//    private void requestData() {
-//        pDialog.setMessage("Memproses Data...");
-//        pDialog.show();
-//        /*Json Request*/
-//        String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin()+ "&level=" +sessionManager.getLevel();
-//
-//        Log.d("url : " ,url);
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Log.d("response", response);
-//                        parseJSON(response);
-//                        InstructionAdapter adapter = new InstructionAdapter(getActivity(), instructions);
-//                        listInstruction.setAdapter(adapter);
-//                        pDialog.dismiss();
-//
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        pDialog.dismiss();
-//
-//                        if (error != null) {
-//                            error.printStackTrace();
-//
-//                        }
-//                    }
-//                });
-//
-//        //add request to queue
-//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-//        requestQueue.add(stringRequest);
-//
-//    }
-//
-//    private void parseJSON(String result) {
-//        if (!result.contains("gagal")) {
-//            try {
-//                JSONObject data = new JSONObject(result);
-//                JSONArray dataAr = data.getJSONArray("data");
-//                for (int i = 0; i < dataAr.length(); i++) {
-//                    JSONObject insObj = dataAr.getJSONObject(i);
-//
-//                    Instruction ins = new Instruction();
-//                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));
-//                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
-//                    ins.setRecipientInstruction(insObj.getString("username"));
-//                    ins.setDateInstruction(insObj.getString("tgl"));
-//                    ins.setStatusInsruction(insObj.getString("status"));
-//
-//                    instructions.add(ins);
-//
-//                }
-//
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//        } else {
-//            txtNoMsg.setVisibility(View.VISIBLE);
-//        }
-//
-//    }
+    private void requestData() {
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
+        /*Json Request*/
+        String url = Config.base_url + "/getUser.php?level=2";
+
+        Log.d("url : ", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        parseJSON(response);
+                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(NewInstructionActivity.this, android.R.layout.simple_spinner_item, recipient);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        spinRecipient.setAdapter(adapter);
+                        pDialog.dismiss();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                });
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void parseJSON(String result) {
+        if (!result.contains("gagal")) {
+            try {
+                JSONObject data = new JSONObject(result);
+                JSONArray dataAr = data.getJSONArray("data");
+                List<ItemSpinner> itemSpinners = new ArrayList<>();
+                for (int i = 0; i < dataAr.length(); i++) {
+                    JSONObject recObj = dataAr.getJSONObject(i);
+                    ItemSpinner item = new ItemSpinner(recObj.getString("username"), recObj.getString("id_user"));
+                    itemSpinners.add(item);
+                }
+                recipient = new ItemSpinner[itemSpinners.size()];
+                itemSpinners.toArray(recipient);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+
+        }
+
+    }
+
+    private void sendData() {
+        pDialog.setMessage("Mengirim Data...");
+        pDialog.show();
+
+        String url = Config.base_url + "/getUser.php?level=2";
+        Log.d("url : ", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        Log.d("Response", response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("penerima", penerima);
+                params.put("isi", isi);
+
+                return params;
+            }
+        };
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 
 }

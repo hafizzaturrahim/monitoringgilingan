@@ -1,4 +1,4 @@
-package com.hafizzaturrahim.monitoringgilingan.grafik;
+package com.hafizzaturrahim.monitoringgilingan;
 
 import android.content.Context;
 import android.view.View;
@@ -6,17 +6,19 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
+
 /**
  * Created by PC-34 on 4/20/2017.
  */
 
-public class CustomSpinnerAdapter extends ArrayAdapter<Parameter> {
+public class CustomSpinnerAdapter extends ArrayAdapter<ItemSpinner> {
 
     private Context context;
-    private Parameter[] params;
+    private ItemSpinner[] params;
 
     public CustomSpinnerAdapter(Context context, int textViewResourceId,
-                                Parameter[] params) {
+                                ItemSpinner[] params) {
         super(context, textViewResourceId, params);
         this.context = context;
         this.params = params;
@@ -26,7 +28,7 @@ public class CustomSpinnerAdapter extends ArrayAdapter<Parameter> {
         return params.length;
     }
 
-    public Parameter getItem(int position){
+    public ItemSpinner getItem(int position){
         return params[position];
     }
 

@@ -1,13 +1,13 @@
-package com.hafizzaturrahim.monitoringgilingan.grafik;
+package com.hafizzaturrahim.monitoringgilingan;
 
 /**
  * Created by PC-34 on 4/20/2017.
  */
 
-public class Parameter {
+public class ItemSpinner {
     String name,value;
 
-    public Parameter(String name, String value) {
+    public ItemSpinner(String name, String value) {
         this.name = name;
         this.value = value;
     }

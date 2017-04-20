@@ -18,7 +18,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -27,10 +26,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.Config;
+import com.hafizzaturrahim.monitoringgilingan.CustomSpinnerAdapter;
+import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
 import com.hafizzaturrahim.monitoringgilingan.R;
 import com.hafizzaturrahim.monitoringgilingan.SessionManager;
 import com.hafizzaturrahim.monitoringgilingan.instruksi.Instruction;
-import com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,26 +85,27 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         pDialog = new ProgressDialog(getActivity());
 
         Spinner spinnerParam = (Spinner) rowView.findViewById(R.id.spParam);
-        Parameter[] parameters = {
-                new Parameter("Speed Gilingan 4", "speed_gil4"),
-                new Parameter("CCR 1", "ccr1"),
-                new Parameter("CCR 2", "ccr2"),
-                new Parameter("RPM Imc 1", "rpm_imc1"),
-                new Parameter("RPM Imc 2", "rpm_imc2"),
-                new Parameter("RPM Imc 3", "rpm_imc3"),
-                new Parameter("RPM Imc 4", "rpm_imc4"),
-                new Parameter("Flow Imb", "flow_imb"),
-                new Parameter("Temperature Imb", "temp_imb"),
-                new Parameter("Level Imb", "level_imb")
+        ItemSpinner[] parameters = {
+                new ItemSpinner("Speed Gilingan 4", "speed_gil4"),
+                new ItemSpinner("CCR 1", "ccr1"),
+                new ItemSpinner("CCR 2", "ccr2"),
+                new ItemSpinner("RPM Imc 1", "rpm_imc1"),
+                new ItemSpinner("RPM Imc 2", "rpm_imc2"),
+                new ItemSpinner("RPM Imc 3", "rpm_imc3"),
+                new ItemSpinner("RPM Imc 4", "rpm_imc4"),
+                new ItemSpinner("Flow Imb", "flow_imb"),
+                new ItemSpinner("Temperature Imb", "temp_imb"),
+                new ItemSpinner("Level Imb", "level_imb")
         };
         CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getActivity(), android.R.layout.simple_spinner_item, parameters);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerParam.setAdapter(adapter);
 
         spinnerParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 // your code here
-                Parameter selected = (Parameter) (parentView.getItemAtPosition(position));
+                ItemSpinner selected = (ItemSpinner) (parentView.getItemAtPosition(position));
                 selectedInput[0] = String.valueOf(selected.getValue());
                 selectedInput[5] = String.valueOf(selected.getName());
 //                Toast.makeText(getActivity(), "The planet is " +

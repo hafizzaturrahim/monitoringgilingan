@@ -39,7 +39,7 @@ public class ReportAdapter extends ArrayAdapter<Report> {
         TextView title = (TextView) rowView.findViewById(R.id.txtTitleReport);
         TextView date = (TextView) rowView.findViewById(R.id.txtDateReport);
 
-        //Set Parameter Value
+        //Set ItemSpinner Value
         title.setText(reports.get(position).getTitleReport());
         date.setText(reports.get(position).getDateReport());
 

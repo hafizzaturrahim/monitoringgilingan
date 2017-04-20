@@ -40,7 +40,7 @@ public class InstructionAdapter extends ArrayAdapter<Instruction> {
         TextView title = (TextView) rowView.findViewById(R.id.txtTitleInstruction);
         TextView date = (TextView) rowView.findViewById(R.id.txtDateInstruction);
 
-        //Set Parameter Value
+        //Set ItemSpinner Value
         recipient.setText(instructions.get(position).getRecipientInstruction());
         title.setText(instructions.get(position).getTitleInstruction());
         date.setText(instructions.get(position).getDateInstruction());
