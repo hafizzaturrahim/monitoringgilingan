@@ -8,10 +8,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hafizzaturrahim.monitoringgilingan.laporan.ReportFragment">
 
-    <ListView
-        android:id="@+id/lvReport"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swReport"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"></ListView>
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/lvReport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"></ListView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </LinearLayout>

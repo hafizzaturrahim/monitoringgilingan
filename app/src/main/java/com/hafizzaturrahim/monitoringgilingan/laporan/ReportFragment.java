@@ -4,7 +4,9 @@ package com.hafizzaturrahim.monitoringgilingan.laporan;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,7 @@ public class ReportFragment extends Fragment {
     ListView listReport;
     ArrayList<Report> reports;
     SessionManager sessionManager;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     public ReportFragment() {
         // Required empty public constructor
@@ -62,11 +65,26 @@ public class ReportFragment extends Fragment {
                 String tanggal = reports.get(position).getDateReport();
                 String konten = reports.get(position).getContentReport();
 
-                Log.d("tanggal laporan : " +tanggal,"isi : " +konten);
+                Log.d("tanggal laporan : " + tanggal, "isi : " + konten);
                 intent.putExtra("judul", judul);
                 intent.putExtra("tanggal", tanggal);
                 intent.putExtra("konten", konten);
                 startActivity(intent);
+            }
+        });
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rowView.findViewById(R.id.swReport);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        reports.clear();
+                        requestData();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
             }
         });
 
@@ -77,7 +95,7 @@ public class ReportFragment extends Fragment {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url+ "/getReport.php";
+        String url = Config.base_url + "/getReport.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

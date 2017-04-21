@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,9 +22,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.Config;
+import com.hafizzaturrahim.monitoringgilingan.CustomSpinnerAdapter;
+import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
 import com.hafizzaturrahim.monitoringgilingan.R;
 import com.hafizzaturrahim.monitoringgilingan.laporan.Report;
 import com.hafizzaturrahim.monitoringgilingan.laporan.ReportAdapter;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,9 +63,12 @@ public class HomeFragment extends Fragment {
     private ColumnChartData data2;
 
     String tgl, ccr1, ccr2, lvl_bologne, flow_imb, temp_imb, level_imb;
-    int[] speed, oil, nozzle;
-    TextView txtTgl, txtCcr1, txtCcr2, txtLvl_bologne, txtFlow_imb, txtTemp_imb, txtLevel_imb;
+    int[] speed, oil, nozzle, imc;
 
+    TextView txtTgl, txtCcr1, txtCcr2, txtLvl_bologne, txtFlow_imb, txtTemp_imb, txtLevel_imb;
+    Spinner spParam;
+
+    MaterialSpinner spinner;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -80,6 +88,26 @@ public class HomeFragment extends Fragment {
         txtFlow_imb = (TextView) rowView.findViewById(R.id.txtflow);
         txtTemp_imb = (TextView) rowView.findViewById(R.id.txttemp);
         txtLevel_imb = (TextView) rowView.findViewById(R.id.txtlevel);
+
+
+        spinner = (MaterialSpinner) rowView.findViewById(R.id.spinner);
+        spParam = (Spinner) rowView.findViewById(R.id.spGilingan);
+
+        spParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                generateData(position);
+//                ItemSpinner selected = (ItemSpinner) (parentView.getItemAtPosition(position));
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+
+            }
+
+        });
 
         //set column chart
         chart = (ColumnChartView) rowView.findViewById(R.id.chartBar);
@@ -103,7 +131,16 @@ public class HomeFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         parseJSON(response);
-                        generateData();
+
+                        ItemSpinner[] parameters = {
+                                new ItemSpinner("Speed", "1"),
+                                new ItemSpinner("Oil Temperature", "2"),
+                                new ItemSpinner("Nozzle", "3"),
+                        };
+                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getActivity(), android.R.layout.simple_spinner_item, parameters);
+                        spinner.setItems(parameters);
+//                        spinner.setAdapter(adapter);
+//                        spParam.setAdapter(adapter);
                         pDialog.dismiss();
 
                     }
@@ -138,7 +175,7 @@ public class HomeFragment extends Fragment {
                     txtCcr1.setText(reportObj.getString("ccr1"));
                     txtCcr2.setText(reportObj.getString("ccr2"));
                     String degree = "\u2103";
-                    txtTemp_imb.setText(reportObj.getString("temp_imb")+ " " +degree);
+                    txtTemp_imb.setText(reportObj.getString("temp_imb") + " " + degree);
                     txtFlow_imb.setText(reportObj.getString("flow_imb"));
                     txtLevel_imb.setText(reportObj.getString("level_imb"));
 
@@ -147,8 +184,26 @@ public class HomeFragment extends Fragment {
                             Integer.parseInt(reportObj.getString("speed_gil4")),
                             Integer.parseInt(reportObj.getString("speed_gil5"))
                     };
-                }
 
+                    oil = new int[]{
+                            Integer.parseInt(reportObj.getString("oil_temp_gil3")),
+                            Integer.parseInt(reportObj.getString("oil_temp_gil4")),
+                            Integer.parseInt(reportObj.getString("oil_temp_gil5"))
+                    };
+
+                    nozzle = new int[]{
+                            Integer.parseInt(reportObj.getString("nozzle_gil3")),
+                            Integer.parseInt(reportObj.getString("nozzle_gil4")),
+                            Integer.parseInt(reportObj.getString("nozzle_gil5"))
+                    };
+
+                    imc = new int[]{
+                            Integer.parseInt(reportObj.getString("rpm_imc1")),
+                            Integer.parseInt(reportObj.getString("rpm_imc2")),
+                            Integer.parseInt(reportObj.getString("rpm_imc3")),
+                            Integer.parseInt(reportObj.getString("rpm_imc4"))
+                    };
+                }
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -159,10 +214,10 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void generateData() {
+    private void generateData(int chosenData) {
         int numColumns = 3;
         String[] label = new String[]{"Gilingan 3", "Gilingan 4", "Gilingan 5"};
-        int[] color = new int[]{ChartUtils.COLOR_BLUE,ChartUtils.COLOR_GREEN,ChartUtils.COLOR_ORANGE,ChartUtils.COLOR_RED};
+        int[] color = new int[]{ChartUtils.COLOR_BLUE, ChartUtils.COLOR_GREEN, ChartUtils.COLOR_ORANGE, ChartUtils.COLOR_RED};
 
         // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
         List<Column> columns = new ArrayList<Column>();
@@ -171,7 +226,17 @@ public class HomeFragment extends Fragment {
         for (int i = 0; i < numColumns; ++i) {
 
             values = new ArrayList<>();
-            values.add(new SubcolumnValue(speed[i],color[i]));
+            switch (chosenData) {
+                case 0:
+                    values.add(new SubcolumnValue(speed[i], color[i]));
+                    break;
+                case 1:
+                    values.add(new SubcolumnValue(oil[i], color[i]));
+                    break;
+                case 2:
+                    values.add(new SubcolumnValue(nozzle[i], color[i]));
+                    break;
+            }
             axisValues.add(new AxisValue(i).setLabel(label[i]));
 
             Column column = new Column(values);

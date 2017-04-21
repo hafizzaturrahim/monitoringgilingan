@@ -6,28 +6,36 @@
 
     tools:context="com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionFragment">
 
-
-    <ListView
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:id="@+id/lvInstruction"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swReport"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:layout_alignParentBottom="true">
+        android:layout_height="wrap_content">
 
-    </ListView>
 
-    <TextView
-        android:id="@+id/txtNoMessage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="Tidak ada instruksi yang anda berikan"
-        android:textSize="18sp" />
+        <ListView
+            android:id="@+id/lvInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:divider="@null"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+        </ListView>
+
+        <TextView
+            android:id="@+id/txtNoMessage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Tidak ada instruksi yang anda berikan"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabNewInstruction"
@@ -40,7 +48,6 @@
         android:layout_marginRight="8dp"
         app:backgroundTint="@android:color/holo_green_dark"
         app:srcCompat="@drawable/ic_add_white_24dp" />
-
     <!--<Button-->
     <!--android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content"-->
