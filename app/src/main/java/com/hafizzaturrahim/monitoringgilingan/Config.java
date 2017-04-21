@@ -5,5 +5,5 @@ package com.hafizzaturrahim.monitoringgilingan;
  */
 
 public class Config {
-    public static String base_url = "http://192.168.137.1/gilinganlocal";
+    public static String base_url = "http://10.34.18.143/gilinganlocal";
 }

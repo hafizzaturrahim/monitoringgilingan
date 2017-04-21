@@ -65,6 +65,7 @@ public class InstructionFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(),DetailInstructionActivity.class);
+                intent.putExtra("id_ins",instructions.get(position).getIdInstruction());
                 intent.putExtra("judul_ins",instructions.get(position).getTitleInstruction());
                 intent.putExtra("pengirim_ins",instructions.get(position).getSenderInstriction());
                 intent.putExtra("penerima_ins",instructions.get(position).getRecipientInstruction());
@@ -138,6 +139,7 @@ public class InstructionFragment extends Fragment {
                     JSONObject insObj = dataAr.getJSONObject(i);
 
                     Instruction ins = new Instruction();
+                    ins.setIdInstruction(insObj.getString("id_instruksi"));
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
                     ins.setDetailInstruction(insObj.getString("isi_instruksi"));
                     ins.setRecipientInstruction(insObj.getString("username"));

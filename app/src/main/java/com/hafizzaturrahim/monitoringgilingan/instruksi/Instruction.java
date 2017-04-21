@@ -6,6 +6,7 @@ package com.hafizzaturrahim.monitoringgilingan.instruksi;
 
 public class Instruction {
 
+    String idInstruction;
     String titleInstruction;
     String senderInstriction;
     String recipientInstruction;
@@ -16,10 +17,12 @@ public class Instruction {
     public Instruction() {
     }
 
-    public Instruction(String titleInstruction, String recipientInstruction, String dateInstruction) {
-        this.titleInstruction = titleInstruction;
-        this.recipientInstruction = recipientInstruction;
-        this.dateInstruction = dateInstruction;
+    public String getIdInstruction() {
+        return idInstruction;
+    }
+
+    public void setIdInstruction(String idInstruction) {
+        this.idInstruction = idInstruction;
     }
 
     public String getTitleInstruction() {
@@ -69,4 +72,6 @@ public class Instruction {
     public void setDateInstruction(String dateInstruction) {
         this.dateInstruction = dateInstruction;
     }
+
+
 }

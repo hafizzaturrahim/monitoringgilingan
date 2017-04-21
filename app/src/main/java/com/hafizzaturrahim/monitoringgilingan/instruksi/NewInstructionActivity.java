@@ -41,11 +41,10 @@ import java.util.Map;
 public class NewInstructionActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     Button confirmBtn;
-    String penerima;
-    String isi;
+    String judul, penerima, isi;
 
     ItemSpinner[] recipient;
-    EditText edtContent;
+    EditText edtTitle, edtContent;
     Spinner spinRecipient;
 
 
@@ -57,10 +56,10 @@ public class NewInstructionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_instruction);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sessionManager = new SessionManager(this);
-
-        edtContent = (EditText) findViewById(R.id.edtNewInst);
         pDialog = new ProgressDialog(this);
+        sessionManager = new SessionManager(this);
+        edtTitle = (EditText) findViewById(R.id.edtNewTitle);
+        edtContent = (EditText) findViewById(R.id.edtNewInst);
         confirmBtn = (Button) findViewById(R.id.btnConfirmInstruction);
         spinRecipient = (Spinner) findViewById(R.id.spRecipient);
 
@@ -95,13 +94,16 @@ public class NewInstructionActivity extends AppCompatActivity {
     }
 
     public void confirmInstruction(View view) {
+        judul = edtTitle.getText().toString();
         isi = edtContent.getText().toString();
 
-        if (!penerima.equals("") && !isi.equals("")) {
-            Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
-            intent.putExtra("menu", 3);
-            startActivity(intent);
+        if (!judul.equals("") && !isi.equals("")) {
+            sendData();
+
         } else {
+            if (judul.equals("")) {
+                edtTitle.setError("Kolom harus diisi");
+            }
             if (isi.equals("")) {
                 edtContent.setError("Kolom harus diisi");
             }
@@ -175,13 +177,18 @@ public class NewInstructionActivity extends AppCompatActivity {
         pDialog.setMessage("Mengirim Data...");
         pDialog.show();
 
-        String url = Config.base_url + "/getUser.php?level=2";
+        String url = Config.base_url + "/newInstruction.php?";
+//        judul=" +judul+"&isi="+isi+"&pengirim="+sessionManager.getIdLogin()+"&penerima=" +penerima
         Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // response
+                        Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
+                        intent.putExtra("menu", 3);
+                        startActivity(intent);
+
                         Log.d("Response", response);
                     }
                 },
@@ -196,9 +203,11 @@ public class NewInstructionActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("penerima", penerima);
+                params.put("judul", judul);
                 params.put("isi", isi);
-
+                params.put("pengirim", sessionManager.getIdLogin());
+                params.put("penerima", penerima);
+                Log.d("datane ",judul+ " "+isi+ " " +penerima);
                 return params;
             }
         };
