@@ -1,5 +1,6 @@
 package com.hafizzaturrahim.monitoringgilingan;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 
 import com.hafizzaturrahim.monitoringgilingan.beranda.HomeFragment;
 import com.hafizzaturrahim.monitoringgilingan.grafik.GraphFragment;
+import com.hafizzaturrahim.monitoringgilingan.instruksi.DetailInstructionActivity;
 import com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionFragment;
 import com.hafizzaturrahim.monitoringgilingan.laporan.ReportFragment;
 
@@ -116,9 +119,31 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void logout() {
-        sessionManager.logoutUser();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+        alert.setTitle("Logout");
+        alert.setMessage("Apakah anda akan melakukan logout?");
+        alert.setNegativeButton("Tidak",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alert.setPositiveButton("Ya",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        sessionManager.logoutUser();
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        dialog.dismiss();
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+        alert.show();
+
     }
 }

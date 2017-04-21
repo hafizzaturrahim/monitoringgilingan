@@ -55,6 +55,7 @@ public class InstructionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(InstructionActivity.this, DetailInstructionActivity.class);
+                intent.putExtra("id_ins", instructions.get(position).getIdInstruction());
                 intent.putExtra("judul_ins", instructions.get(position).getTitleInstruction());
                 intent.putExtra("pengirim_ins", instructions.get(position).getSenderInstriction());
                 intent.putExtra("penerima_ins", instructions.get(position).getRecipientInstruction());
@@ -94,7 +95,7 @@ public class InstructionActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url+ "/getInstruction.php?id=" + sessionManager.getIdLogin();
+        String url = Config.base_url+ "/getInstruction.php?id=" + sessionManager.getIdLogin()+"&level=2";
 
         Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -136,6 +137,7 @@ public class InstructionActivity extends AppCompatActivity {
                     JSONObject insObj = dataAr.getJSONObject(i);
 
                     Instruction ins = new Instruction();
+                    ins.setIdInstruction(insObj.getString("id_instruksi"));
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
                     ins.setDetailInstruction(insObj.getString("isi_instruksi"));
                     ins.setRecipientInstruction(insObj.getString("username"));

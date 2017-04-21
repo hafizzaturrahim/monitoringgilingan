@@ -187,7 +187,12 @@ public class NewInstructionActivity extends AppCompatActivity {
                         // response
                         Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
                         intent.putExtra("menu", 3);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                        // Add new Flag to start new Activity
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
+                        finish();
 
                         Log.d("Response", response);
                     }

@@ -151,6 +151,7 @@
             android:layout_above="@+id/btnFinish"
             android:text="Konfirmasi"
             android:theme="@style/ConfirmButton"
+            android:layout_alignParentBottom="true"
             android:visibility="gone"
              />
 
