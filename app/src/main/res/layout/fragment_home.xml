@@ -213,24 +213,22 @@
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/spinner"
-            app:ms_dropdown_max_height="350dp"
-            app:ms_dropdown_height="wrap_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <Spinner
-            android:id="@+id/spGilingan"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:paddingTop="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
+        <!--<Spinner-->
+            <!--android:id="@+id/spGilingan"-->
+            <!--android:paddingLeft="0dp"-->
+            <!--android:paddingRight="0dp"-->
+            <!--android:paddingBottom="0dp"-->
+            <!--android:paddingTop="0dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true">-->
 
-        </Spinner>
+        <!--</Spinner>-->
 
         <lecho.lib.hellocharts.view.ColumnChartView
             android:id="@+id/chartBar"

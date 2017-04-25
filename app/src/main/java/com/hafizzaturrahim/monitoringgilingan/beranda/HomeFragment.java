@@ -3,6 +3,7 @@ package com.hafizzaturrahim.monitoringgilingan.beranda;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +26,8 @@ import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.CustomSpinnerAdapter;
 import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
 import com.hafizzaturrahim.monitoringgilingan.R;
-import com.hafizzaturrahim.monitoringgilingan.laporan.Report;
-import com.hafizzaturrahim.monitoringgilingan.laporan.ReportAdapter;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.jaredrummler.materialspinner.MaterialSpinnerAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,8 +38,10 @@ import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 
 import lecho.lib.hellocharts.model.Axis;
 import lecho.lib.hellocharts.model.AxisValue;
@@ -66,9 +68,10 @@ public class HomeFragment extends Fragment {
     int[] speed, oil, nozzle, imc;
 
     TextView txtTgl, txtCcr1, txtCcr2, txtLvl_bologne, txtFlow_imb, txtTemp_imb, txtLevel_imb;
-    Spinner spParam;
+//    Spinner spParam;
 
     MaterialSpinner spinner;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -89,25 +92,34 @@ public class HomeFragment extends Fragment {
         txtTemp_imb = (TextView) rowView.findViewById(R.id.txttemp);
         txtLevel_imb = (TextView) rowView.findViewById(R.id.txtlevel);
 
-
         spinner = (MaterialSpinner) rowView.findViewById(R.id.spinner);
-        spParam = (Spinner) rowView.findViewById(R.id.spGilingan);
 
-        spParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        String[] param = {"-- Pilih parameter --","Speed","Oil Temperature", "Nozzle"};
+        spinner.setItems(param);
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+//                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
                 generateData(position);
-//                ItemSpinner selected = (ItemSpinner) (parentView.getItemAtPosition(position));
-
-
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-
-            }
-
         });
+//        spParam = (Spinner) rowView.findViewById(R.id.spGilingan);
+//        spParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+//                generateData(position);
+////                ItemSpinner selected = (ItemSpinner) (parentView.getItemAtPosition(position));
+//
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView) {
+//
+//            }
+//
+//        });
+
 
         //set column chart
         chart = (ColumnChartView) rowView.findViewById(R.id.chartBar);
@@ -132,13 +144,7 @@ public class HomeFragment extends Fragment {
                         Log.d("response", response);
                         parseJSON(response);
 
-                        ItemSpinner[] parameters = {
-                                new ItemSpinner("Speed", "1"),
-                                new ItemSpinner("Oil Temperature", "2"),
-                                new ItemSpinner("Nozzle", "3"),
-                        };
-                        CustomSpinnerAdapter adapter = new CustomSpinnerAdapter(getActivity(), android.R.layout.simple_spinner_item, parameters);
-                        spinner.setItems(parameters);
+
 //                        spinner.setAdapter(adapter);
 //                        spParam.setAdapter(adapter);
                         pDialog.dismiss();
@@ -227,13 +233,13 @@ public class HomeFragment extends Fragment {
 
             values = new ArrayList<>();
             switch (chosenData) {
-                case 0:
+                case 1:
                     values.add(new SubcolumnValue(speed[i], color[i]));
                     break;
-                case 1:
+                case 2:
                     values.add(new SubcolumnValue(oil[i], color[i]));
                     break;
-                case 2:
+                case 3:
                     values.add(new SubcolumnValue(nozzle[i], color[i]));
                     break;
             }
