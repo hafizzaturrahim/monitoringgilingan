@@ -35,6 +35,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.hafizzaturrahim.monitoringgilingan.Config.convertDate;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -160,7 +162,7 @@ public class InstructionFragment extends Fragment {
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
                     ins.setDetailInstruction(insObj.getString("isi_instruksi"));
                     ins.setRecipientInstruction(insObj.getString("username"));
-                    ins.setDateInstruction(insObj.getString("tgl"));
+                    ins.setDateInstruction(convertDate(insObj.getString("tgl")));
                     ins.setStatusInsruction(insObj.getString("status"));
 
                     instructions.add(ins);

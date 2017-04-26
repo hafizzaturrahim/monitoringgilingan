@@ -32,14 +32,8 @@ import com.jaredrummler.materialspinner.MaterialSpinnerAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.UnsupportedEncodingException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 
@@ -50,6 +44,8 @@ import lecho.lib.hellocharts.model.ColumnChartData;
 import lecho.lib.hellocharts.model.SubcolumnValue;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.ColumnChartView;
+
+import static com.hafizzaturrahim.monitoringgilingan.Config.convertDate;
 
 
 /**
@@ -94,7 +90,7 @@ public class HomeFragment extends Fragment {
 
         spinner = (MaterialSpinner) rowView.findViewById(R.id.spinner);
 
-        String[] param = {"-- Pilih parameter --","Speed","Oil Temperature", "Nozzle"};
+        String[] param = {"-- Pilih parameter --", "Speed", "Oil Temperature", "Nozzle"};
         spinner.setItems(param);
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
@@ -103,6 +99,7 @@ public class HomeFragment extends Fragment {
                 generateData(position);
             }
         });
+
 //        spParam = (Spinner) rowView.findViewById(R.id.spGilingan);
 //        spParam.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 //            @Override
@@ -127,7 +124,13 @@ public class HomeFragment extends Fragment {
         chart.setZoomEnabled(!chart.isZoomEnabled());
 //        chart.setOnValueTouchListener(new ValueTouchListener());
 
+
+        chart2 = (ColumnChartView) rowView.findViewById(R.id.chartBar2);
+        chart2.startDataAnimation();
+        chart2.setZoomEnabled(!chart2.isZoomEnabled());
+
         requestData();
+
         return rowView;
 
     }
@@ -143,7 +146,7 @@ public class HomeFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         parseJSON(response);
-
+                        generateData2();
 
 //                        spinner.setAdapter(adapter);
 //                        spParam.setAdapter(adapter);
@@ -262,20 +265,36 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private String convertDate(String oldDate) {
-        String newDate = null;
-        String pattern = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+    private void generateData2() {
+        int numColumns = 4;
+        String[] label = new String[]{"Imc 1", "Imc 2", "Imc 3", "Imc 4"};
+        int[] color = new int[]{ChartUtils.COLOR_ORANGE, ChartUtils.COLOR_VIOLET, ChartUtils.COLOR_BLUE, ChartUtils.COLOR_GREEN};
 
-        try {
-            Date date = formatter.parse(oldDate);
-            SimpleDateFormat newFormatter = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss");
-            newDate = newFormatter.format(date);
+        // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
+        List<Column> columns = new ArrayList<Column>();
+        List<AxisValue> axisValues = new ArrayList<AxisValue>();
+        List<SubcolumnValue> values;
+        for (int i = 0; i < numColumns; ++i) {
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            values = new ArrayList<>();
+            values.add(new SubcolumnValue(imc[i], color[i]));
+            axisValues.add(new AxisValue(i).setLabel(label[i]));
+
+            Column column = new Column(values);
+            column.setHasLabels(true);
+            column.setHasLabelsOnlyForSelected(false);
+
+            columns.add(column);
         }
-        return newDate;
+
+        data2 = new ColumnChartData(columns);
+        data2.setAxisXBottom(new Axis(axisValues).setHasLines(true));
+
+        Axis axisY = new Axis().setHasLines(true);
+        data2.setAxisYLeft(axisY);
+
+        chart2.setColumnChartData(data2);
+
     }
 
 

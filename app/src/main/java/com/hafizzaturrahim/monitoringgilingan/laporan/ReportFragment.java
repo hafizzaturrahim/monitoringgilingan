@@ -168,7 +168,7 @@ public class ReportFragment extends Fragment {
                     report.setId(reportObj.getString("id_laporan"));
                     report.setTitleReport(reportObj.getString("judul_laporan"));
                     report.setContentReport(reportObj.getString("detail_laporan"));
-                    report.setDateReport(reportObj.getString("tgl"));
+                    report.setDateReport(Config.convertDate(reportObj.getString("tgl")));
                     reports.add(report);
 
                 }
