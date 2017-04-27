@@ -21,23 +21,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        showNotification(remoteMessage.getData().get("message"));
+        String title = remoteMessage.getNotification().getTitle();
+        String message = remoteMessage.getNotification().getBody();
+        showNotification(title,message);
         // TODO: Handle FCM messages here.
         // If the application is in the foreground handle both data and notification messages here.
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated.
         Log.d(TAG, "From: " + remoteMessage.getFrom());
         Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        Log.d(TAG, "Notification Message Body 2 : " + remoteMessage.getNotification().getTitle());
     }
 
-    private void showNotification(String message){
+    private void showNotification(String title,String message){
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder =new NotificationCompat.Builder(this)
                 .setAutoCancel(true)
-                .setContentTitle("Ini judul Notif")
+                .setContentTitle(title)
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_chat_black_24dp)
                 .setContentIntent(pendingIntent);

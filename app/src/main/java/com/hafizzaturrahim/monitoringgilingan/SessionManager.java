@@ -39,6 +39,19 @@ public class SessionManager {
         editor = pref.edit();
     }
 
+    public SessionManager(Context context,String token) {
+        this.mcontext = context;
+        pref = mcontext.getSharedPreferences("dataToken", PRIVATE_MODE);
+        editor = pref.edit();
+        editor.putString("token",token);
+        editor.commit();
+    }
+
+    public String getToken() {
+        // return token
+        return pref.getString("token", null);
+    }
+
     /**
      * Create login session
      */
@@ -76,7 +89,7 @@ public class SessionManager {
      * */
     public void logoutUser(){
         // Clearing all data from Shared Preferences
-        editor.clear();
+        editor.remove(PREF_NAME);
         editor.commit();
 
     }
