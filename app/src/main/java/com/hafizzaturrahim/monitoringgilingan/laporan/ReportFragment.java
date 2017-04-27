@@ -56,7 +56,8 @@ public class ReportFragment extends Fragment {
         reports = new ArrayList<>();
 
         requestData();
-
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
         listReport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,8 +93,7 @@ public class ReportFragment extends Fragment {
     }
 
     private void requestData() {
-        pDialog.setMessage("Memproses Data...");
-        pDialog.show();
+
         /*Json Request*/
         String url = Config.base_url + "/getReport.php";
 
@@ -120,35 +120,6 @@ public class ReportFragment extends Fragment {
                         }
                     }
                 });
-
-        //        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//
-//                        pDialog.dismiss();
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        String body = null;
-//                        //get status code here
-//                        String statusCode = String.valueOf(error.networkResponse.statusCode);
-//                        //get response body and parse with appropriate encoding
-//                        if(error.networkResponse.data!=null) {
-//                            try {
-//                                body = new String(error.networkResponse.data,"UTF-8");
-//                            } catch (UnsupportedEncodingException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-////                        Toast.makeText(getActivity(), "Error " +statusCode+ " message " +body, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//        //add request to queue
-//        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-//        requestQueue.add(jsonObjectRequest);
 
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

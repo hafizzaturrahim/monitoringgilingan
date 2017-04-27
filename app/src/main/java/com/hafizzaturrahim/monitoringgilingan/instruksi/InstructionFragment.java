@@ -93,6 +93,8 @@ public class InstructionFragment extends Fragment {
             }
         });
 
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
         requestData();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rowView.findViewById(R.id.swReport);
@@ -113,8 +115,6 @@ public class InstructionFragment extends Fragment {
     }
 
     private void requestData() {
-        pDialog.setMessage("Memproses Data...");
-        pDialog.show();
         /*Json Request*/
         String url = Config.base_url+ "/getInstruction.php?id=" +sessionManager.getIdLogin()+ "&level=" +sessionManager.getLevel();
 

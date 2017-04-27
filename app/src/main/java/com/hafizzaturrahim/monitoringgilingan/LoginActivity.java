@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hafizzaturrahim.monitoringgilingan.karyawan.InstructionActivity;
 
 import org.json.JSONArray;
@@ -50,8 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         if (sessionManager.isLoggedIn()) {
             Intent intent;
             if ("1".equals(sessionManager.getLevel())) {
+                FirebaseMessaging.getInstance().subscribeToTopic("spv");
                 intent = new Intent(LoginActivity.this, MainActivity.class);
             } else {
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("spv");
                 intent = new Intent(LoginActivity.this, InstructionActivity.class);
             }
             startActivity(intent);
