@@ -89,7 +89,7 @@ public class SessionManager {
      * */
     public void logoutUser(){
         // Clearing all data from Shared Preferences
-        editor.remove(PREF_NAME);
+        editor.clear();
         editor.commit();
 
     }
