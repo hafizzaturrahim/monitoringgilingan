@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.CustomSpinnerAdapter;
 import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
+import com.hafizzaturrahim.monitoringgilingan.LoginActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.jaredrummler.materialspinner.MaterialSpinnerAdapter;
@@ -90,8 +91,7 @@ public class HomeFragment extends Fragment {
 
         spinner = (MaterialSpinner) rowView.findViewById(R.id.spinner);
 
-        String[] param = {"-- Pilih parameter --", "Speed", "Oil Temperature", "Nozzle"};
-        spinner.setItems(param);
+
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -147,6 +147,8 @@ public class HomeFragment extends Fragment {
                         Log.d("response", response);
                         parseJSON(response);
                         generateData2();
+                        String[] param = {"-- Pilih parameter --", "Speed", "Oil Temperature", "Nozzle"};
+                        spinner.setItems(param);
 
 //                        spinner.setAdapter(adapter);
 //                        spParam.setAdapter(adapter);
@@ -158,7 +160,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.dismiss();
-
+                        Toast.makeText(getActivity(), "Terjadi kesalahan, coba lagi", Toast.LENGTH_SHORT).show();
                         if (error != null) {
                             error.printStackTrace();
 

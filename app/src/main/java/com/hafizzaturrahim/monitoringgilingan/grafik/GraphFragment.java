@@ -205,6 +205,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 newDate.set(Calendar.MINUTE, minute);
+                newDate.set(Calendar.SECOND,0);
                 fromTimeExt.setText(timeFormatter.format(newDate.getTime()));
                 selectedInput[3] = timeFormatter.format(newDate.getTime());
             }
@@ -216,6 +217,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 newDate.set(Calendar.MINUTE, minute);
+                newDate.set(Calendar.SECOND,0);
                 toTimeExt.setText(timeFormatter.format(newDate.getTime()));
                 selectedInput[4] = timeFormatter.format(newDate.getTime());
             }

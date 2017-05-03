@@ -82,7 +82,11 @@ public class LoginActivity extends AppCompatActivity {
         password = MD5(passEdt.getText().toString());
 
         if (!username.equals("") && !password.equals("")) {
-            requestData();
+            if (username.matches("[a-zA-Z.? ]*") && password.matches("[a-zA-Z.? ]*") ){
+                requestData();
+            }else{
+                notifTxt.setVisibility(View.VISIBLE);
+            }
 
         } else {
             if (username.equals("")) {
@@ -97,23 +101,24 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url+ "/login.php?name=" + username + "&pass=" + password;
 
+        String url = Config.base_url+ "/login.php?name=" + username + "&pass=" + password;
+        Log.d("login", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("response", response);
+                        Log.d("login response", response);
                         parseJSON(response);
-                        pDialog.dismiss();
                         newActivity();
+                        pDialog.dismiss();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.dismiss();
-
+                        Toast.makeText(LoginActivity.this, "Terjadi kesalahan, coba lagi", Toast.LENGTH_SHORT).show();
                         if (error != null) {
                             error.printStackTrace();
 
@@ -162,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             isSuccess = true;
         } else {
+
             isSuccess = false;
         }
 

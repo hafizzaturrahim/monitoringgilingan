@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
             title = "Beranda";
         } else if (id == R.id.nav_grafik) {
             fragment = new GraphFragment();
-            title = "Grafik";
+            title = "Statistik";
         } else if (id == R.id.nav_laporan) {
             fragment = new ReportFragment();
             title = "Laporan";

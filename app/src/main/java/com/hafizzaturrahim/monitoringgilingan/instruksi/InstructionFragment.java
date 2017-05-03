@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -136,6 +137,7 @@ public class InstructionFragment extends Fragment {
                     public void onErrorResponse(VolleyError error) {
                         pDialog.dismiss();
 
+                        Toast.makeText(getActivity(), "Terjadi kesalahan, coba lagi", Toast.LENGTH_SHORT).show();
                         if (error != null) {
                             error.printStackTrace();
 

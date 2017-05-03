@@ -9,7 +9,7 @@
         <item
             android:id="@+id/nav_grafik"
             android:icon="@drawable/ic_insert_chart_black_24dp"
-            android:title="Grafik" />
+            android:title="Statistik" />
         <item
             android:id="@+id/nav_laporan"
             android:icon="@drawable/ic_library_books_black_24dp"
