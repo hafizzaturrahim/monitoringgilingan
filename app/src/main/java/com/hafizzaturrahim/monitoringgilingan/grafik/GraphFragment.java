@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
@@ -31,6 +32,7 @@ import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
 import com.hafizzaturrahim.monitoringgilingan.R;
 import com.hafizzaturrahim.monitoringgilingan.SessionManager;
 import com.hafizzaturrahim.monitoringgilingan.instruksi.Instruction;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,13 +62,14 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     private SimpleDateFormat dateFormatter;
     private SimpleDateFormat timeFormatter;
 
-    // 0 = parameter
+    // 0 = nama kolom parameter
     // 1 = tanggal mulai
     // 2 = tanggal berakhir
     // 3 = jam mulai
     // 4 = jam berakhir
     // 5 = nama asli parameter
-    String[] selectedInput = new String[6];
+    // 6 = jenis group
+    String[] selectedInput = new String[7];
 
     private ProgressDialog pDialog;
     SessionManager sessionManager;
@@ -117,6 +120,24 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 // your code here
             }
 
+        });
+
+        MaterialSpinner spGroup = (MaterialSpinner) rowView.findViewById(R.id.spGroup);
+        String[] group = {
+                "Tidak dikelompokkan",
+                "PerMenit",
+                "PerJam",
+                "PerHari",
+                "PerBulan"
+        };
+        selectedInput[6] = "0";
+        spGroup.setItems(group);
+        spGroup.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                Snackbar.make(view, "Clicked " + position, Snackbar.LENGTH_LONG).show();
+                selectedInput[6] = String.valueOf(position);
+            }
         });
 
         mulaiBtn = (Button) rowView.findViewById(R.id.btnMulai);
@@ -235,71 +256,6 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         } else if (v == toTimeExt) {
             toTimePickerDialog.show();
         }
-    }
-
-    private void requestData() {
-        pDialog.setMessage("Memproses Data...");
-        pDialog.show();
-        /*Json Request*/
-        String url = Config.base_url + "/getInstruction.php?id=" + sessionManager.getIdLogin() + "&level=" + sessionManager.getLevel();
-
-        Log.d("url : ", url);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("response", response);
-                        parseJSON(response);
-
-                        pDialog.dismiss();
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        pDialog.dismiss();
-
-                        if (error != null) {
-                            error.printStackTrace();
-
-                        }
-                    }
-                });
-
-        //add request to queue
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(stringRequest);
-
-    }
-
-    private void parseJSON(String result) {
-        if (!result.contains("gagal")) {
-            try {
-                JSONObject data = new JSONObject(result);
-                JSONArray dataAr = data.getJSONArray("data");
-                for (int i = 0; i < dataAr.length(); i++) {
-                    JSONObject insObj = dataAr.getJSONObject(i);
-
-                    Instruction ins = new Instruction();
-                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));
-                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
-                    ins.setRecipientInstruction(insObj.getString("username"));
-                    ins.setDateInstruction(insObj.getString("tgl"));
-                    ins.setStatusInsruction(insObj.getString("status"));
-
-
-                }
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-
-        }
-
     }
 
 }

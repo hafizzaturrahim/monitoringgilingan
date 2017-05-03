@@ -31,6 +31,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Mulai :" />
 
     <LinearLayout
@@ -56,6 +57,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Berakhir :" />
 
     <LinearLayout
@@ -78,6 +80,17 @@
             android:layout_weight=".5"
             android:hint="Jam berakhir" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Group berdasarkan : " />
+
+    <com.jaredrummler.materialspinner.MaterialSpinner
+        android:id="@+id/spGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"

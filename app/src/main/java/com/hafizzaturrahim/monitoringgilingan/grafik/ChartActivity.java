@@ -45,16 +45,13 @@ import static android.R.attr.theme;
 public class ChartActivity extends AppCompatActivity {
     private LineChartView chart;
     private LineChartData data;
-    private int maxNumberOfLines = 4;
+
     private int numberOfPoints;
 
     String[] label;
     float[] numbersTab;
 
-    private boolean hasAxes = true;
-    private boolean hasAxesNames = true;
-
-    String dataInput[] = new String[5];
+    String dataInput[] = new String[7];
 
     private ProgressDialog pDialog;
     SessionManager sessionManager;
@@ -70,7 +67,7 @@ public class ChartActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         sessionManager = new SessionManager(this);
 
-        Toast.makeText(this, "1 : " + dataInput[0] + " 2 : " + dataInput[1] + " 3 : " + dataInput[2] + " 4 : " + dataInput[3] + " 5: " + dataInput[4], Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, "1 : " + dataInput[0] + " 2 : " + dataInput[1] + " 3 : " + dataInput[2] + " 4 : " + dataInput[3] + " 5: " + dataInput[4], Toast.LENGTH_LONG).show();
         chart = (LineChartView) findViewById(R.id.chart);
         chart.setOnValueTouchListener(new LineChartOnValueSelectListener() {
             @Override
@@ -124,21 +121,14 @@ public class ChartActivity extends AppCompatActivity {
 
 
         data = new LineChartData(lines);
+        Axis axisX = new Axis();
+        Axis axisY = new Axis().setHasLines(true);
 
-        if (hasAxes) {
-            Axis axisX = new Axis();
-            Axis axisY = new Axis().setHasLines(true);
-            if (hasAxesNames) {
-                axisX.setName("Tanggal");
-                axisY.setName(dataInput[5]);
-            }
-            data.setAxisXBottom(new Axis(axisValues).setHasLines(true));
-            data.setAxisYLeft(axisY);
-        } else {
-            data.setAxisXBottom(null);
-            data.setAxisYLeft(null);
-        }
+        axisX.setName("Tanggal");
+        axisY.setName(dataInput[5]);
 
+        data.setAxisXBottom(new Axis(axisValues).setHasLines(true));
+        data.setAxisYLeft(axisY);
 
         data.setBaseValue(Float.NEGATIVE_INFINITY);
         chart.setLineChartData(data);
@@ -151,7 +141,7 @@ public class ChartActivity extends AppCompatActivity {
         /*Json Request*/
         String star_date = dataInput[1] + "%20" + dataInput[3];
         String end_date = dataInput[2] + "%20" + dataInput[4];
-        String url = Config.base_url + "/getPeformance.php?param=" + dataInput[0] + "&start=" + star_date + "&stop=" + end_date;
+        String url = Config.base_url + "/getPeformance.php?param=" + dataInput[0] + "&start=" + star_date + "&stop=" + end_date + "&group=" +dataInput[6];
 
         Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
