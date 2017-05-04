@@ -11,31 +11,50 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hafizzaturrahim.monitoringgilingan.karyawan.InstructionActivity">
 
-    <TextView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swIns"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Instruksi Supervisor"
-        android:id="@+id/textView" />
+        android:layout_height="wrap_content">
 
-    <ListView
-        android:paddingTop="8dp"
-        android:id="@+id/lvInstruction2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@+id/textView">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    </ListView>
 
-    <TextView
-        android:id="@+id/txtNoMessage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="Tidak ada instruksi yang anda berikan"
-        android:textSize="18sp" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Instruksi Supervisor" />
+
+
+            <ListView
+                android:id="@+id/lvInstruction2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/textView"
+                android:divider="@null"
+                android:paddingTop="8dp">
+
+            </ListView>
+
+            <TextView
+                android:id="@+id/txtNoMessage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Tidak ada instruksi yang anda berikan"
+                android:textSize="18sp"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+
+
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </RelativeLayout>

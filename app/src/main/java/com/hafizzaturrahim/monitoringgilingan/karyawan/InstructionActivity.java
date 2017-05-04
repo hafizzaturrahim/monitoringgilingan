@@ -2,6 +2,8 @@ package com.hafizzaturrahim.monitoringgilingan.karyawan;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +43,7 @@ public class InstructionActivity extends AppCompatActivity {
     SessionManager sessionManager;
     private ProgressDialog pDialog;
     TextView txtNoMsg;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,21 @@ public class InstructionActivity extends AppCompatActivity {
                 intent.putExtra("isi_ins", instructions.get(position).getDetailInstruction());
                 intent.putExtra("status_ins", instructions.get(position).getStatusInsruction());
                 startActivity(intent);
+            }
+        });
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swIns);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        instructions.clear();
+                        requestData();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
             }
         });
     }
@@ -131,6 +149,7 @@ public class InstructionActivity extends AppCompatActivity {
 
     private void parseJSON(String result) {
         if (!result.contains("gagal")) {
+            txtNoMsg.setVisibility(View.GONE);
             try {
                 JSONObject data = new JSONObject(result);
                 JSONArray dataAr = data.getJSONArray("data");
@@ -142,7 +161,7 @@ public class InstructionActivity extends AppCompatActivity {
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
                     ins.setDetailInstruction(insObj.getString("isi_instruksi"));
                     ins.setRecipientInstruction(insObj.getString("username"));
-                    ins.setDateInstruction(insObj.getString("tgl"));
+                    ins.setDateInstruction(Config.convertDate(insObj.getString("tgl")));
                     ins.setStatusInsruction(insObj.getString("status"));
 
                     instructions.add(ins);

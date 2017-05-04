@@ -135,7 +135,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         spGroup.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Snackbar.make(view, "Clicked " + position, Snackbar.LENGTH_LONG).show();
+//                Snackbar.make(view, "Clicked " + position, Snackbar.LENGTH_LONG).show();
                 selectedInput[6] = String.valueOf(position);
             }
         });

@@ -2,13 +2,10 @@ package com.hafizzaturrahim.monitoringgilingan.grafik;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,8 +16,6 @@ import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.R;
 import com.hafizzaturrahim.monitoringgilingan.SessionManager;
-import com.hafizzaturrahim.monitoringgilingan.instruksi.Instruction;
-import com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,10 +34,7 @@ import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
-import static android.R.attr.data;
-import static android.R.attr.theme;
-
-public class ChartActivity extends AppCompatActivity {
+public class ChartActivity2 extends AppCompatActivity {
     private LineChartView chart;
     private LineChartData data;
 

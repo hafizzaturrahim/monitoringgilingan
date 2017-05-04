@@ -228,7 +228,7 @@ public class HomeFragment extends Fragment {
     private void generateData(int chosenData) {
         int numColumns = 3;
         String[] label = new String[]{"Gilingan 3", "Gilingan 4", "Gilingan 5"};
-        int[] color = new int[]{ChartUtils.COLOR_BLUE, ChartUtils.COLOR_GREEN, ChartUtils.COLOR_ORANGE, ChartUtils.COLOR_RED};
+        int[] color = new int[]{ChartUtils.COLOR_BLUE, ChartUtils.COLOR_GREEN, ChartUtils.COLOR_RED};
 
         // Column can have many subcolumns, here by default I use 1 subcolumn in each of 8 columns.
         List<Column> columns = new ArrayList<Column>();

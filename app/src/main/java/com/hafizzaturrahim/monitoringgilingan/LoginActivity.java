@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         password = MD5(passEdt.getText().toString());
 
         if (!username.equals("") && !password.equals("")) {
-            if (username.matches("[a-zA-Z.? ]*") && password.matches("[a-zA-Z.? ]*") ){
+            if (username.matches("[a-zA-Z0-9.? ]*") && password.matches("[a-zA-Z0-9.? ]*") ){
                 requestData();
             }else{
                 notifTxt.setVisibility(View.VISIBLE);
