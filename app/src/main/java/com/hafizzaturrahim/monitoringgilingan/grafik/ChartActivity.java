@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -83,6 +84,25 @@ public class ChartActivity extends AppCompatActivity {
         });
         requestData();
 
+        TextView textBot = (TextView) findViewById(R.id.txtBotChart);
+        switch (dataInput[6]) {
+            case "0":
+                textBot.setText("Waktu");
+                break;
+            case "1":
+                textBot.setText("Menit");
+                break;
+            case "2":
+                textBot.setText("Jam");
+                break;
+            case "3":
+                textBot.setText("Tanggal");
+                break;
+            case "4":
+                textBot.setText("Bulan");
+                break;
+        }
+
     }
 
     @Override
@@ -143,7 +163,7 @@ public class ChartActivity extends AppCompatActivity {
         /*Json Request*/
         String star_date = dataInput[1] + "%20" + dataInput[3];
         String end_date = dataInput[2] + "%20" + dataInput[4];
-        String url = Config.base_url + "/getPeformance.php?param=" + dataInput[0] + "&start=" + star_date + "&stop=" + end_date + "&group=" +dataInput[6];
+        String url = Config.base_url + "/getPeformance.php?param=" + dataInput[0] + "&start=" + star_date + "&stop=" + end_date + "&group=" + dataInput[6];
 
         Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -187,7 +207,7 @@ public class ChartActivity extends AppCompatActivity {
                 for (int i = 0; i < dataAr.length(); i++) {
                     JSONObject Obj = dataAr.getJSONObject(i);
                     numbersTab[i] = Float.parseFloat(Obj.getString(dataInput[0]));
-                    label[i] =Obj.getString("tgl");
+                    label[i] = Obj.getString("tgl");
 //                    Log.d("numberstab "+i, String.valueOf(numbersTab[i]));
 //                    Instruction ins = new Instruction();
 //                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));

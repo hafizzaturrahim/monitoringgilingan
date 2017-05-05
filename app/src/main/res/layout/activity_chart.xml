@@ -8,11 +8,21 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.hafizzaturrahim.monitoringgilingan.grafik.ChartActivity">
+    android:orientation="vertical"
+    tools:context="com.hafizzaturrahim.monitoringgilingan.grafik.ChartActivity"
+    android:weightSum="1">
 
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/chart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="395dp"
+        android:layout_weight="0.40">
     </lecho.lib.hellocharts.view.LineChartView>
+    <TextView
+        android:layout_below="@+id/chart"
+        android:id="@+id/txtBotChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="tes"/>
 </LinearLayout>
