@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hafizzaturrahim.monitoringgilingan.beranda.HomeFragment;
 import com.hafizzaturrahim.monitoringgilingan.grafik.GraphFragment;
 import com.hafizzaturrahim.monitoringgilingan.instruksi.DetailInstructionActivity;
@@ -137,6 +138,7 @@ public class MainActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog,
                                         int which) {
                         sessionManager.logoutUser();
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("spv");
                         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                         dialog.dismiss();
                         startActivity(intent);
