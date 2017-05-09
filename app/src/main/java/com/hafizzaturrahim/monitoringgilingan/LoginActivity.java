@@ -49,7 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         sessionManager = new SessionManager(this);
-        String token = FirebaseInstanceId.getInstance().getToken();
+
+
         if (sessionManager.isLoggedIn()) {
             Intent intent;
             if ("1".equals(sessionManager.getLevel())) {
@@ -84,9 +85,9 @@ public class LoginActivity extends AppCompatActivity {
         password = MD5(passEdt.getText().toString());
 
         if (!username.equals("") && !password.equals("")) {
-            if (username.matches("[a-zA-Z0-9.? ]*") && password.matches("[a-zA-Z0-9.? ]*") ){
+            if (username.matches("[a-zA-Z0-9.? ]*") && password.matches("[a-zA-Z0-9.? ]*")) {
                 requestData();
-            }else{
+            } else {
                 notifTxt.setVisibility(View.VISIBLE);
             }
 
@@ -103,10 +104,10 @@ public class LoginActivity extends AppCompatActivity {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-
-        String url = Config.base_url+ "/login.php?name=" + username + "&pass=" + password;
+        final String token = FirebaseInstanceId.getInstance().getToken();
+        String url = Config.base_url + "/login.php?";
         Log.d("login", url);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -126,15 +127,18 @@ public class LoginActivity extends AppCompatActivity {
 
                         }
                     }
-                });
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("name", username);
+                params.put("pass",password);
+                params.put("token",token);
+                return params;
+            }
+        };
 //(
-//            @Override
-//            protected Map<String,String> getParams(){
-////                Map<String,String> params = new HashMap<String, String>();
-////
-////                params.put("&code=",accessToken);
-//                return params;
-//            }
+//
 //
 //            @Override
 //            public Map<String, String> getHeaders() throws AuthFailureError {
@@ -197,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
             byte[] array = md.digest(md5.getBytes());
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < array.length; ++i) {
-                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
             }
             return sb.toString();
         } catch (java.security.NoSuchAlgorithmException e) {

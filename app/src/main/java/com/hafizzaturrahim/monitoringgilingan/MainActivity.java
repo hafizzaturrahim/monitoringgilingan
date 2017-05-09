@@ -1,5 +1,6 @@
 package com.hafizzaturrahim.monitoringgilingan;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +14,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.hafizzaturrahim.monitoringgilingan.beranda.HomeFragment;
 import com.hafizzaturrahim.monitoringgilingan.grafik.GraphFragment;
@@ -24,15 +34,18 @@ import com.hafizzaturrahim.monitoringgilingan.instruksi.DetailInstructionActivit
 import com.hafizzaturrahim.monitoringgilingan.instruksi.InstructionFragment;
 import com.hafizzaturrahim.monitoringgilingan.laporan.ReportFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     SessionManager sessionManager;
-
+    private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        pDialog = new ProgressDialog(this);
 
         sessionManager = new SessionManager(this);
 
@@ -137,16 +150,62 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        sessionManager.logoutUser();
-                        FirebaseMessaging.getInstance().unsubscribeFromTopic("spv");
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        requestData();
                         dialog.dismiss();
-                        startActivity(intent);
-                        finish();
                     }
                 });
 
         alert.show();
+
+    }
+
+    private void requestData() {
+        pDialog.setMessage("Log out...");
+        pDialog.show();
+        /*Json Request*/
+        String id = sessionManager.getIdLogin();
+        final String token = FirebaseInstanceId.getInstance().getToken();
+        String url = Config.base_url + "/logout.php?id="+id;
+        Log.d("login", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("login response", response);
+                        sessionManager.logoutUser();
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("spv");
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        pDialog.dismiss();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "Terjadi kesalahan, coba lagi", Toast.LENGTH_SHORT).show();
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                });
+//
+//
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> params = new HashMap<String, String>();
+//                params.put("Authorization", "Basic " + base64);
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                params.put("Accept", "*/*" );
+//                return super.getHeaders();
+//            })
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
 
     }
 }
