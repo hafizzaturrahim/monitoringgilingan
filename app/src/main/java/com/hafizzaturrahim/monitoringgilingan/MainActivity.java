@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     SessionManager sessionManager;
     private ProgressDialog pDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(chosenMenu).setChecked(true);
         if (chosenMenu == 0) {
             onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_beranda));
-        }else if(chosenMenu == 3){
+        } else if (chosenMenu == 3) {
             onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_instruksi));
         }
     }
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity
         /*Json Request*/
         String id = sessionManager.getIdLogin();
         final String token = FirebaseInstanceId.getInstance().getToken();
-        String url = Config.base_url + "/logout.php?id="+id;
+        String url = Config.base_url + "/logout.php?id=" + id;
         Log.d("login", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

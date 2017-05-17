@@ -27,7 +27,6 @@ public class SessionManager {
     // All Shared Preferences Keys
     private static final String isLogin = "IsLoggedIn";
 
-
     public static final String keyUsername = "name";
     public static final String keyId = "id_user";
     public static final String keyLevel = "level";
@@ -37,19 +36,6 @@ public class SessionManager {
         this.mcontext = context;
         pref = mcontext.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
-    }
-
-    public SessionManager(Context context,String token) {
-        this.mcontext = context;
-        pref = mcontext.getSharedPreferences("dataToken", PRIVATE_MODE);
-        editor = pref.edit();
-        editor.putString("token",token);
-        editor.commit();
-    }
-
-    public String getToken() {
-        // return token
-        return pref.getString("token", null);
     }
 
     /**

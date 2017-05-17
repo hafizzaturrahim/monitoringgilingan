@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.hafizzaturrahim.monitoringgilingan.SessionManager;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -24,9 +23,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        SessionManager sessionManager = new SessionManager(getApplicationContext(),refreshedToken);
-        Log.d(TAG, "Refreshed token: " + sessionManager.getToken());
-
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
