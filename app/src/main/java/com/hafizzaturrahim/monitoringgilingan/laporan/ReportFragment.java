@@ -59,6 +59,7 @@ public class ReportFragment extends Fragment {
         requestData();
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
+        pDialog.setCancelable(false);
         listReport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

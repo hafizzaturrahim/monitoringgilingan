@@ -22,6 +22,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.LoginActivity;
 import com.hafizzaturrahim.monitoringgilingan.MainActivity;
@@ -108,6 +110,56 @@ public class InstructionActivity extends AppCompatActivity {
         Intent intent = new Intent(InstructionActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    private void requestLogout() {
+        pDialog.setMessage("Log out...");
+        pDialog.show();
+        /*Json Request*/
+        String id = sessionManager.getIdLogin();
+        final String token = FirebaseInstanceId.getInstance().getToken();
+        String url = Config.base_url + "/logout.php?id=" + id;
+        Log.d("login", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("login response", response);
+                        sessionManager.logoutUser();
+                        FirebaseMessaging.getInstance().unsubscribeFromTopic("spv");
+                        Intent intent = new Intent(InstructionActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        pDialog.dismiss();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+                        Toast.makeText(InstructionActivity.this, "Terjadi kesalahan, coba lagi", Toast.LENGTH_SHORT).show();
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                });
+//
+//
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> params = new HashMap<String, String>();
+//                params.put("Authorization", "Basic " + base64);
+//                params.put("Content-Type", "application/x-www-form-urlencoded");
+//                params.put("Accept", "*/*" );
+//                return super.getHeaders();
+//            })
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
     }
 
     private void requestData() {

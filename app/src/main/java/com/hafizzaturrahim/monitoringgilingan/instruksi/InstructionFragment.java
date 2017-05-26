@@ -96,6 +96,7 @@ public class InstructionFragment extends Fragment {
 
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
+        pDialog.setCancelable(false);
         requestData();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rowView.findViewById(R.id.swReport);

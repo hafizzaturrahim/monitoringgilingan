@@ -115,6 +115,7 @@ public class NewInstructionActivity extends AppCompatActivity {
     private void requestData() {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
+        pDialog.setCancelable(false);
         /*Json Request*/
         String url = Config.base_url + "/getUser.php?level=2";
 

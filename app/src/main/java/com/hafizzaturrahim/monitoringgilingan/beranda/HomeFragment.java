@@ -129,6 +129,7 @@ public class HomeFragment extends Fragment {
     private void getPeformance() {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
+        pDialog.setCancelable(false);
         /*Json Request*/
         String url = Config.base_url + "/getCurrentPeformance.php";
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

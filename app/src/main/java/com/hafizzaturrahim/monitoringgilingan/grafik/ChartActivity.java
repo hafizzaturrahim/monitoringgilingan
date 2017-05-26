@@ -160,6 +160,7 @@ public class ChartActivity extends AppCompatActivity {
     private void requestData() {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
+        pDialog.setCancelable(false);
         /*Json Request*/
         String star_date = dataInput[1] + "%20" + dataInput[3];
         String end_date = dataInput[2] + "%20" + dataInput[4];
