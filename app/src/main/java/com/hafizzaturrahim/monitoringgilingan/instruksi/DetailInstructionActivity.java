@@ -4,16 +4,21 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -31,7 +36,7 @@ import org.w3c.dom.Text;
 
 public class DetailInstructionActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
-    String id, status;
+    String id, status, message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,8 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
         TextView txtColumnSender = (TextView) findViewById(R.id.txtSenderColumn);
 
-        Button cancelBtn = (Button) findViewById(R.id.btnCancel);
         Button confirmBtn = (Button) findViewById(R.id.btnConfirm);
+        Button rejectBtn = (Button) findViewById(R.id.btnReject);
         Button finishBtn = (Button) findViewById(R.id.btnFinish);
         LinearLayout cancelLayout = (LinearLayout) findViewById(R.id.cancelLayout);
 
@@ -64,6 +69,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
             txtColumnSender.setText("Pengirim");
             if (status.equals("1")) {
                 confirmBtn.setVisibility(View.VISIBLE);
+                rejectBtn.setVisibility(View.VISIBLE);
             } else if (status.equals("2")) {
                 finishBtn.setVisibility(View.VISIBLE);
             }
@@ -72,11 +78,15 @@ public class DetailInstructionActivity extends AppCompatActivity {
                 cancelLayout.setVisibility(View.VISIBLE);
             }
         }
-
 //        if (status.equals("4")) {
 //            txtStatus.setText("Dibatalkan");
 //        }
-        if (status.equals("3")) {
+
+        if (status.equals("4")){
+            txtStatus.setText("Ditolak");
+            txtStatus.setTextColor(0xFF4CAF50);
+        }
+        else if (status.equals("3")) {
             txtStatus.setText("Selesai dikerjakan");
             txtStatus.setTextColor(0xFF4CAF50);
         } else if (status.equals("2")) {
@@ -86,76 +96,88 @@ public class DetailInstructionActivity extends AppCompatActivity {
             txtStatus.setText("Menunggu konfirmasi");
             txtStatus.setTextColor(0xFFFF3300);
         }
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(DetailInstructionActivity.this);
-                alert.setTitle("Konfirmasi Pembatalan");
-                alert.setMessage("Apakah anda akan membatalkan instruksi ini?");
-                alert.setNegativeButton("Tidak",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alert.setPositiveButton("Ya",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                deleteData();
-                                dialog.dismiss();
-                            }
-                        });
-
-                alert.show();
-
-            }
-        });
-
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeStatus("2");
-            }
-        });
-
-        finishBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(DetailInstructionActivity.this);
-                alert.setTitle("Selesai");
-                alert.setMessage("Apakah anda yakin telah melaksanakan instruksi ini?");
-                alert.setNegativeButton("Tidak",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alert.setPositiveButton("Ya",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                changeStatus("3");
-                                dialog.dismiss();
-                            }
-                        });
-
-                alert.show();
-
-            }
-        });
 
         txtTitle.setText(intent.getStringExtra("judul_ins"));
         txtRecipient.setText(intent.getStringExtra("penerima_ins"));
         txtContent.setText(intent.getStringExtra("isi_ins"));
+    }
 
+    public void acceptInstruction(View view){
+        changeStatus("2");
+    }
 
+    public void finishInstruction(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(DetailInstructionActivity.this);
+        alert.setTitle("Selesai");
+        alert.setMessage("Apakah anda yakin telah melaksanakan instruksi ini?");
+        alert.setNegativeButton("Tidak",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alert.setPositiveButton("Ya",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        changeStatus("3");
+                        dialog.dismiss();
+                    }
+                });
+
+        alert.show();
+    }
+
+    public void rejectInstruction(View view){
+        new MaterialDialog.Builder(this)
+                .title("Penolakan")
+                .content("Anda akan menolak instruksi. Pastikan untuk memberikan alasan yang jelas terhadap penolakan tersebut")
+                .inputType(
+                        InputType.TYPE_CLASS_TEXT
+                                | InputType.TYPE_TEXT_VARIATION_PERSON_NAME
+                                | InputType.TYPE_TEXT_FLAG_CAP_WORDS)
+                .positiveText("Kirim")
+                .negativeText("Batal")
+                .input(
+                        null,
+                        null,
+                        false,
+                        new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                                message = input.toString();
+//                                Toast.makeText(DetailInstructionActivity.this, "isinya" +message, Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                .show();
+    }
+
+    public void cancelInstruction(View view){
+        AlertDialog.Builder alert = new AlertDialog.Builder(DetailInstructionActivity.this);
+        alert.setTitle("Konfirmasi Pembatalan");
+        alert.setMessage("Apakah anda akan membatalkan instruksi ini?");
+        alert.setNegativeButton("Tidak",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alert.setPositiveButton("Ya",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        deleteData();
+                        dialog.dismiss();
+                    }
+                });
+
+        alert.show();
     }
 
     @Override

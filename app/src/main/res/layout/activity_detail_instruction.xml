@@ -148,18 +148,33 @@
             android:id="@+id/btnConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/btnFinish"
             android:text="Konfirmasi"
+            android:onClick="acceptInstruction"
             android:theme="@style/ConfirmButton"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/btnReject"
             android:visibility="gone"
-             />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/btnReject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btnFinish"
+            android:text="Tolak"
+            android:visibility="gone"
+            android:onClick="rejectInstruction"
+            android:theme="@style/LoginButton"
+            android:layout_alignParentBottom="true"
+
+            />
 
         <Button
             android:id="@+id/btnFinish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Selesai"
+            android:onClick="finishInstruction"
             android:theme="@style/SuccessButton"
             android:visibility="gone"
             android:layout_alignParentBottom="true" />
@@ -185,6 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Batalkan"
+                android:onClick="cancelInstruction"
                 android:theme="@style/LoginButton" />
         </LinearLayout>
 
