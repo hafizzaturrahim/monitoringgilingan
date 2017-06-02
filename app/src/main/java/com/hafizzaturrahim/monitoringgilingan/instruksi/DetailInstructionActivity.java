@@ -34,9 +34,12 @@ import com.hafizzaturrahim.monitoringgilingan.karyawan.InstructionActivity;
 
 import org.w3c.dom.Text;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DetailInstructionActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
-    String id, status, message;
+    String id, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +151,8 @@ public class DetailInstructionActivity extends AppCompatActivity {
                         new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                                message = input.toString();
+                                String message = input.toString();
+                                changeStatus("4",message);
 //                                Toast.makeText(DetailInstructionActivity.this, "isinya" +message, Toast.LENGTH_SHORT).show();
                             }
                         })
@@ -245,6 +249,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
                         Intent intent = new Intent(DetailInstructionActivity.this, InstructionActivity.class);
                         startActivity(intent);
                         finish();
+                        Toast.makeText(DetailInstructionActivity.this, "Status instruksi berhasil diubah", Toast.LENGTH_SHORT).show();
 
                     }
                 },
@@ -263,6 +268,50 @@ public class DetailInstructionActivity extends AppCompatActivity {
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
 
+    private void changeStatus(final String status, final String msg) {
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
+        /*Json Request*/
+        String url = Config.base_url + "/changeStatus.php?";
+
+        Log.d("url : ", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        pDialog.dismiss();
+                        Intent intent = new Intent(DetailInstructionActivity.this, InstructionActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", id);
+                params.put("status",status);
+                params.put("pesan",msg);
+                return params;
+            }
+        };
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 }
