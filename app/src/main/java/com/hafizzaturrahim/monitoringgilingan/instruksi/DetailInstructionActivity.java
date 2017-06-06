@@ -44,7 +44,7 @@ import static com.hafizzaturrahim.monitoringgilingan.Config.convertDate;
 
 public class DetailInstructionActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
-    String id, status;
+    String id, status,judul,isi_pesan,isi_penolakan;
     SessionManager sessionManager;
 
     @Override
@@ -66,13 +66,15 @@ public class DetailInstructionActivity extends AppCompatActivity {
         TextView txtRecipient = (TextView) findViewById(R.id.txtRecipientDetailIns);
         TextView txtContent = (TextView) findViewById(R.id.txtContentDetailIns);
         TextView txtStatus = (TextView) findViewById(R.id.txtStatusDetailIns);
-
         TextView txtColumnSender = (TextView) findViewById(R.id.txtSenderColumn);
+
+        requestData();
 
         Button confirmBtn = (Button) findViewById(R.id.btnConfirm);
         Button rejectBtn = (Button) findViewById(R.id.btnReject);
         Button finishBtn = (Button) findViewById(R.id.btnFinish);
         LinearLayout cancelLayout = (LinearLayout) findViewById(R.id.cancelLayout);
+        LinearLayout rejectLayout = (LinearLayout) findViewById(R.id.rejectLayout);
 
         if (level.equals("2")) {
             txtColumnSender.setText("Pengirim");
@@ -81,6 +83,10 @@ public class DetailInstructionActivity extends AppCompatActivity {
                 rejectBtn.setVisibility(View.VISIBLE);
             } else if (status.equals("2")) {
                 finishBtn.setVisibility(View.VISIBLE);
+            }else if(status.equals("4")){
+                rejectLayout.setVisibility(View.VISIBLE);
+                TextView txtRejection = (TextView) findViewById(R.id.txtMsgReject);
+                txtRejection.setText(isi_penolakan);
             }
         } else {
             if (status.equals("1")) {
@@ -93,7 +99,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
         if (status.equals("4")){
             txtStatus.setText("Ditolak");
-            txtStatus.setTextColor(0xFF4CAF50);
+            txtStatus.setTextColor(0xFFFF3300);
         }
         else if (status.equals("3")) {
             txtStatus.setText("Selesai dikerjakan");
@@ -103,7 +109,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
             txtStatus.setTextColor(0xFF3F51B5);
         } else {
             txtStatus.setText("Menunggu konfirmasi");
-            txtStatus.setTextColor(0xFFFF3300);
+            txtStatus.setTextColor(0xFF3F51B5);
         }
 
         txtTitle.setText(intent.getStringExtra("judul_ins"));
