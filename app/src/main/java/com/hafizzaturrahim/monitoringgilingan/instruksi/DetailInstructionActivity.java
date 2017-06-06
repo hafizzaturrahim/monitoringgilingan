@@ -44,7 +44,7 @@ import static com.hafizzaturrahim.monitoringgilingan.Config.convertDate;
 
 public class DetailInstructionActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
-    String id, status,judul,isi_pesan,isi_penolakan;
+    String id, status, judul, isi_pesan, isi_penolakan;
     SessionManager sessionManager;
 
     @Override
@@ -78,38 +78,39 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
         if (level.equals("2")) {
             txtColumnSender.setText("Pengirim");
-            if (status.equals("1")) {
-                confirmBtn.setVisibility(View.VISIBLE);
-                rejectBtn.setVisibility(View.VISIBLE);
-            } else if (status.equals("2")) {
-                finishBtn.setVisibility(View.VISIBLE);
-            }else if(status.equals("4")){
-                rejectLayout.setVisibility(View.VISIBLE);
-                TextView txtRejection = (TextView) findViewById(R.id.txtMsgReject);
-                txtRejection.setText(isi_penolakan);
-            }
-        } else {
-            if (status.equals("1")) {
-                cancelLayout.setVisibility(View.VISIBLE);
-            }
         }
-//        if (status.equals("4")) {
-//            txtStatus.setText("Dibatalkan");
-//        }
 
-        if (status.equals("4")){
-            txtStatus.setText("Ditolak");
-            txtStatus.setTextColor(0xFFFF3300);
-        }
-        else if (status.equals("3")) {
-            txtStatus.setText("Selesai dikerjakan");
-            txtStatus.setTextColor(0xFF4CAF50);
-        } else if (status.equals("2")) {
-            txtStatus.setText("Dikonfirmasi");
-            txtStatus.setTextColor(0xFF3F51B5);
-        } else {
-            txtStatus.setText("Menunggu konfirmasi");
-            txtStatus.setTextColor(0xFF3F51B5);
+        switch (status) {
+            case "1":
+                txtStatus.setText("Menunggu konfirmasi");
+                txtStatus.setTextColor(0xFF3F51B5);
+                if (level.equals("2")){
+                    confirmBtn.setVisibility(View.VISIBLE);
+                    rejectBtn.setVisibility(View.VISIBLE);
+                }else{
+                    cancelLayout.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "2":
+                txtStatus.setText("Dikonfirmasi");
+                txtStatus.setTextColor(0xFF3F51B5);
+                if (level.equals("2")){
+                    finishBtn.setVisibility(View.VISIBLE);
+                }
+                break;
+            case "3":
+                txtStatus.setText("Selesai dikerjakan");
+                txtStatus.setTextColor(0xFF4CAF50);
+                break;
+            case "4":
+                txtStatus.setText("Ditolak");
+                txtStatus.setTextColor(0xFFFF3300);
+                if (level.equals("2")) {
+                    rejectLayout.setVisibility(View.VISIBLE);
+                    TextView txtRejection = (TextView) findViewById(R.id.txtMsgReject);
+                    txtRejection.setText(isi_penolakan);
+                }
+                break;
         }
 
         txtTitle.setText(intent.getStringExtra("judul_ins"));
@@ -117,11 +118,11 @@ public class DetailInstructionActivity extends AppCompatActivity {
         txtContent.setText(intent.getStringExtra("isi_ins"));
     }
 
-    public void acceptInstruction(View view){
+    public void acceptInstruction(View view) {
         changeStatus("2");
     }
 
-    public void finishInstruction(View view){
+    public void finishInstruction(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(DetailInstructionActivity.this);
         alert.setTitle("Selesai");
         alert.setMessage("Apakah anda yakin telah melaksanakan instruksi ini?");
@@ -146,7 +147,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public void rejectInstruction(View view){
+    public void rejectInstruction(View view) {
         new MaterialDialog.Builder(this)
                 .title("Penolakan")
                 .content("Anda akan menolak instruksi. Pastikan untuk memberikan alasan yang jelas terhadap penolakan tersebut")
@@ -164,14 +165,14 @@ public class DetailInstructionActivity extends AppCompatActivity {
                             @Override
                             public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                                 String message = input.toString();
-                                changeStatus("4",message);
+                                changeStatus("4", message);
 //                                Toast.makeText(DetailInstructionActivity.this, "isinya" +message, Toast.LENGTH_SHORT).show();
                             }
                         })
                 .show();
     }
 
-    public void cancelInstruction(View view){
+    public void cancelInstruction(View view) {
         AlertDialog.Builder alert = new AlertDialog.Builder(DetailInstructionActivity.this);
         alert.setTitle("Konfirmasi Pembatalan");
         alert.setMessage("Apakah anda akan membatalkan instruksi ini?");
@@ -311,13 +312,13 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
                         }
                     }
-                }){
+                }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("id", id);
-                params.put("status",status);
-                params.put("pesan",msg);
+                params.put("status", status);
+                params.put("pesan", msg);
                 return params;
             }
         };
@@ -329,9 +330,9 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
     private void requestData() {
         /*Json Request*/
-        String url = Config.base_url+ "/getDetailInstruction.php?id=" +id;
+        String url = Config.base_url + "/getDetailInstruction.php?id=" + id;
 
-        Log.d("url : " ,url);
+        Log.d("url : ", url);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
