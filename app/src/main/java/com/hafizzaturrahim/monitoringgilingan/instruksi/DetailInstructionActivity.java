@@ -32,21 +32,27 @@ import com.hafizzaturrahim.monitoringgilingan.R;
 import com.hafizzaturrahim.monitoringgilingan.SessionManager;
 import com.hafizzaturrahim.monitoringgilingan.karyawan.InstructionActivity;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.hafizzaturrahim.monitoringgilingan.Config.convertDate;
+
 public class DetailInstructionActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     String id, status;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_instruction);
 
-        SessionManager sessionManager = new SessionManager(this);
+        sessionManager = new SessionManager(this);
         String level = sessionManager.getLevel();
         Intent intent = getIntent();
 
@@ -313,5 +319,60 @@ public class DetailInstructionActivity extends AppCompatActivity {
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void requestData() {
+        /*Json Request*/
+        String url = Config.base_url+ "/getDetailInstruction.php?id=" +id;
+
+        Log.d("url : " ,url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("response", response);
+                        parseJSON(response);
+                        pDialog.dismiss();
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        pDialog.dismiss();
+
+                        Toast.makeText(DetailInstructionActivity.this, "Terjadi kesalahan, coba lagi", Toast.LENGTH_SHORT).show();
+                        if (error != null) {
+                            error.printStackTrace();
+
+                        }
+                    }
+                });
+
+        //add request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void parseJSON(String result) {
+        if (!result.contains("gagal")) {
+            try {
+                JSONObject data = new JSONObject(result);
+                JSONArray dataAr = data.getJSONArray("data");
+                for (int i = 0; i < dataAr.length(); i++) {
+                    JSONObject insObj = dataAr.getJSONObject(i);
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+
+        }
+
     }
 }
