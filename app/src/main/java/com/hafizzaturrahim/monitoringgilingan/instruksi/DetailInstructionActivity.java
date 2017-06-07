@@ -47,6 +47,8 @@ public class DetailInstructionActivity extends AppCompatActivity {
     String id, status, judul, isi_pesan, isi_penolakan;
     SessionManager sessionManager;
 
+    TextView txtRejection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,14 +63,14 @@ public class DetailInstructionActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
 
         id = intent.getStringExtra("id_ins");
+        requestData();
+
         status = intent.getStringExtra("status_ins");
         TextView txtTitle = (TextView) findViewById(R.id.txtTitleDetailIns);
         TextView txtRecipient = (TextView) findViewById(R.id.txtRecipientDetailIns);
         TextView txtContent = (TextView) findViewById(R.id.txtContentDetailIns);
         TextView txtStatus = (TextView) findViewById(R.id.txtStatusDetailIns);
         TextView txtColumnSender = (TextView) findViewById(R.id.txtSenderColumn);
-
-        requestData();
 
         Button confirmBtn = (Button) findViewById(R.id.btnConfirm);
         Button rejectBtn = (Button) findViewById(R.id.btnReject);
@@ -84,17 +86,17 @@ public class DetailInstructionActivity extends AppCompatActivity {
             case "1":
                 txtStatus.setText("Menunggu konfirmasi");
                 txtStatus.setTextColor(0xFF3F51B5);
-                if (level.equals("2")){
+                if (level.equals("2")) {
                     confirmBtn.setVisibility(View.VISIBLE);
                     rejectBtn.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     cancelLayout.setVisibility(View.VISIBLE);
                 }
                 break;
             case "2":
                 txtStatus.setText("Dikonfirmasi");
                 txtStatus.setTextColor(0xFF3F51B5);
-                if (level.equals("2")){
+                if (level.equals("2")) {
                     finishBtn.setVisibility(View.VISIBLE);
                 }
                 break;
@@ -107,8 +109,8 @@ public class DetailInstructionActivity extends AppCompatActivity {
                 txtStatus.setTextColor(0xFFFF3300);
                 if (level.equals("2")) {
                     rejectLayout.setVisibility(View.VISIBLE);
-                    TextView txtRejection = (TextView) findViewById(R.id.txtMsgReject);
-                    txtRejection.setText(isi_penolakan);
+                    txtRejection = (TextView) findViewById(R.id.txtMsgReject);
+
                 }
                 break;
         }
@@ -246,14 +248,14 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
     }
 
-    private void changeStatus(String status) {
+    private void changeStatus(final String status) {
         pDialog.setMessage("Memproses Data...");
         pDialog.show();
         /*Json Request*/
-        String url = Config.base_url + "/changeStatus.php?id=" + id + "&status=" + status;
+        String url = Config.base_url + "/changeStatus.php?";
 
         Log.d("url : ", url);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -276,7 +278,15 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
                         }
                     }
-                });
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", id);
+                params.put("status", status);
+                return params;
+            }
+        };
 
         //add request to queue
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -330,6 +340,8 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
     private void requestData() {
         /*Json Request*/
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
         String url = Config.base_url + "/getDetailInstruction.php?id=" + id;
 
         Log.d("url : ", url);
@@ -339,6 +351,9 @@ public class DetailInstructionActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         parseJSON(response);
+                        if (status.equals("4")) {
+                            txtRejection.setText(isi_penolakan);
+                        }
                         pDialog.dismiss();
 
                     }
@@ -369,6 +384,12 @@ public class DetailInstructionActivity extends AppCompatActivity {
                 JSONArray dataAr = data.getJSONArray("data");
                 for (int i = 0; i < dataAr.length(); i++) {
                     JSONObject insObj = dataAr.getJSONObject(i);
+                    String jenis = insObj.getString("jenis_pesan");
+                    if (jenis.equals("2")) {
+                        isi_penolakan = insObj.getString("isi_pesan");
+                        Log.d("penolakan", isi_penolakan);
+                    }
+
 
                 }
 

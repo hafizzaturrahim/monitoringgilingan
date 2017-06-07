@@ -56,7 +56,11 @@ public class InstructionActivity extends AppCompatActivity {
 
         listInstruction = (ListView) findViewById(R.id.lvInstruction2);
         txtNoMsg = (TextView) findViewById(R.id.txtNoMessage);
+
+        pDialog.setMessage("Memproses Data...");
+        pDialog.show();
         requestData();
+
         listInstruction.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,14 +109,14 @@ public class InstructionActivity extends AppCompatActivity {
         }
     }
 
-    private void logout() {
-        sessionManager.logoutUser();
-        Intent intent = new Intent(InstructionActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    private void logout() {
+//        sessionManager.logoutUser();
+//        Intent intent = new Intent(InstructionActivity.this, LoginActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 
-    private void requestLogout() {
+    private void logout() {
         pDialog.setMessage("Log out...");
         pDialog.show();
         /*Json Request*/
@@ -163,8 +167,7 @@ public class InstructionActivity extends AppCompatActivity {
     }
 
     private void requestData() {
-        pDialog.setMessage("Memproses Data...");
-        pDialog.show();
+
         /*Json Request*/
         String url = Config.base_url+ "/getInstruction.php?id=" + sessionManager.getIdLogin()+"&level=2";
 
@@ -211,7 +214,7 @@ public class InstructionActivity extends AppCompatActivity {
                     Instruction ins = new Instruction();
                     ins.setIdInstruction(insObj.getString("id_instruksi"));
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
-                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
+                    ins.setDetailInstruction(insObj.getString("isi_pesan"));
                     ins.setRecipientInstruction(insObj.getString("username"));
                     ins.setDateInstruction(Config.convertDate(insObj.getString("tgl")));
                     ins.setStatusInsruction(insObj.getString("status"));

@@ -163,7 +163,7 @@ public class InstructionFragment extends Fragment {
                     Instruction ins = new Instruction();
                     ins.setIdInstruction(insObj.getString("id_instruksi"));
                     ins.setTitleInstruction(insObj.getString("judul_instruksi"));
-                    ins.setDetailInstruction(insObj.getString("isi_instruksi"));
+                    ins.setDetailInstruction(insObj.getString("isi_pesan"));
                     ins.setRecipientInstruction(insObj.getString("username"));
                     ins.setDateInstruction(convertDate(insObj.getString("tgl")));
                     ins.setStatusInsruction(insObj.getString("status"));
