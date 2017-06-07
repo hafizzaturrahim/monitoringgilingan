@@ -225,6 +225,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
                         pDialog.dismiss();
                         Intent intent = new Intent(DetailInstructionActivity.this, MainActivity.class);
                         intent.putExtra("menu", 3);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();
 
@@ -261,9 +262,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         pDialog.dismiss();
-                        Intent intent = new Intent(DetailInstructionActivity.this, InstructionActivity.class);
-                        startActivity(intent);
-                        finish();
+                        returnActivity();
                         Toast.makeText(DetailInstructionActivity.this, "Status instruksi berhasil diubah", Toast.LENGTH_SHORT).show();
 
                     }
@@ -306,9 +305,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         pDialog.dismiss();
-                        Intent intent = new Intent(DetailInstructionActivity.this, InstructionActivity.class);
-                        startActivity(intent);
-                        finish();
+
 
                     }
                 },
@@ -316,7 +313,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         pDialog.dismiss();
-
+                        returnActivity();
                         if (error != null) {
                             error.printStackTrace();
 
@@ -402,5 +399,12 @@ public class DetailInstructionActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void returnActivity() {
+        Intent intent = new Intent(DetailInstructionActivity.this, InstructionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }
