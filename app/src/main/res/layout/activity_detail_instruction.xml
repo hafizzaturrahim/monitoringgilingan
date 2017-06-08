@@ -166,7 +166,7 @@
                     android:id="@+id/txtMsgReject"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="testsetestestset" />
+                    android:text="" />
             </LinearLayout>
         </LinearLayout>
 

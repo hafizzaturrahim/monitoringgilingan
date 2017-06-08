@@ -105,13 +105,10 @@ public class DetailInstructionActivity extends AppCompatActivity {
                 txtStatus.setTextColor(0xFF4CAF50);
                 break;
             case "4":
+                rejectLayout.setVisibility(View.VISIBLE);
+                txtRejection = (TextView) findViewById(R.id.txtMsgReject);
                 txtStatus.setText("Ditolak");
                 txtStatus.setTextColor(0xFFFF3300);
-                if (level.equals("2")) {
-                    rejectLayout.setVisibility(View.VISIBLE);
-                    txtRejection = (TextView) findViewById(R.id.txtMsgReject);
-
-                }
                 break;
         }
 
@@ -305,7 +302,7 @@ public class DetailInstructionActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         pDialog.dismiss();
-
+                        returnActivity();
 
                     }
                 },
