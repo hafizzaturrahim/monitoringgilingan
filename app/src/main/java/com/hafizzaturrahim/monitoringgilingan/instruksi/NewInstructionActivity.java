@@ -189,7 +189,7 @@ public class NewInstructionActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // response
                         Intent intent = new Intent(NewInstructionActivity.this, MainActivity.class);
-                        intent.putExtra("menu", 3);
+//                        intent.putExtra("menu", 3);
 
                         // Add new Flag to start new Activity
                         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);

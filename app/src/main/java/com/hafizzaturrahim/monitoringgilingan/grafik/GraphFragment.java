@@ -19,7 +19,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -29,6 +31,7 @@ import com.android.volley.toolbox.Volley;
 import com.hafizzaturrahim.monitoringgilingan.Config;
 import com.hafizzaturrahim.monitoringgilingan.CustomSpinnerAdapter;
 import com.hafizzaturrahim.monitoringgilingan.ItemSpinner;
+import com.hafizzaturrahim.monitoringgilingan.MainActivity;
 import com.hafizzaturrahim.monitoringgilingan.R;
 import com.hafizzaturrahim.monitoringgilingan.SessionManager;
 import com.hafizzaturrahim.monitoringgilingan.instruksi.Instruction;
@@ -52,6 +55,8 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     private EditText fromTimeExt;
     private EditText toTimeExt;
 
+//    private Button edtParam;
+
     private DatePickerDialog fromDatePickerDialog;
     private DatePickerDialog toDatePickerDialog;
 
@@ -70,7 +75,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
     // 5 = nama asli parameter
     // 6 = jenis group
     String[] selectedInput = new String[7];
-
+    ItemSpinner[] parameters;
     private ProgressDialog pDialog;
     SessionManager sessionManager;
 
@@ -88,7 +93,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         pDialog = new ProgressDialog(getActivity());
 
         Spinner spinnerParam = (Spinner) rowView.findViewById(R.id.spParam);
-        ItemSpinner[] parameters = {
+        parameters = new ItemSpinner[]{
                 new ItemSpinner("Speed Gilingan 4", "speed_gil4"),
                 new ItemSpinner("CCR 1", "ccr1"),
                 new ItemSpinner("CCR 2", "ccr2"),
@@ -132,6 +137,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         };
         selectedInput[6] = "0";
         spGroup.setItems(group);
+
         spGroup.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -169,6 +175,15 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+//        edtParam = (Button) rowView.findViewById(R.id.btnParam);
+//        edtParam.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showParam();
+//            }
+//        });
+//        edtParam.setInputType(InputType.TYPE_NULL);
+//        edtParam.requestFocus();
 
         fromDateEtxt = (EditText) rowView.findViewById(R.id.etxt_fromdate);
         fromDateEtxt.setInputType(InputType.TYPE_NULL);
@@ -226,7 +241,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 newDate.set(Calendar.MINUTE, minute);
-                newDate.set(Calendar.SECOND,0);
+                newDate.set(Calendar.SECOND, 0);
                 fromTimeExt.setText(timeFormatter.format(newDate.getTime()));
                 selectedInput[3] = timeFormatter.format(newDate.getTime());
             }
@@ -238,7 +253,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                 newDate.set(Calendar.MINUTE, minute);
-                newDate.set(Calendar.SECOND,0);
+                newDate.set(Calendar.SECOND, 0);
                 toTimeExt.setText(timeFormatter.format(newDate.getTime()));
                 selectedInput[4] = timeFormatter.format(newDate.getTime());
             }
@@ -256,6 +271,23 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         } else if (v == toTimeExt) {
             toTimePickerDialog.show();
         }
+    }
+
+    private void showParam() {
+        new MaterialDialog.Builder(getActivity())
+                .title("Pilih parameter")
+                .items((CharSequence[]) parameters)
+                .itemsCallbackSingleChoice(
+                        2,
+                        new MaterialDialog.ListCallbackSingleChoice() {
+                            @Override
+                            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                Toast.makeText(getActivity(), "iki " +text, Toast.LENGTH_SHORT).show();
+                                return true; // allow selection
+                            }
+                        })
+                .positiveText("Pilih")
+                .show();
     }
 
 }
