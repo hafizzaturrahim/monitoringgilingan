@@ -42,7 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_chat_black_24dp)
+                .setSmallIcon(R.drawable.rni_launcher)
                 .setGroup("report")
                 .setContentIntent(pendingIntent);
 
