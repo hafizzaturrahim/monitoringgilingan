@@ -148,33 +148,13 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
 
         mulaiBtn = (Button) rowView.findViewById(R.id.btnMulai);
 
-        mulaiBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String notif = "Wajib diisi";
+//        mulaiBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
 
-                if (selectedInput[1] == null || selectedInput[2] == null) {
-                    if (selectedInput[1] == null) {
-                        fromDateEtxt.setError(notif);
-                    }
-                    if (selectedInput[2] == null) {
-                        toDateEtxt.setError(notif);
-                    }
-//                    if (selectedInput[3] == null) {
-//                        fromTimeExt.setError(notif);
-//                    }
-//                    if (selectedInput[4] == null) {
-//                        toTimeExt.setError(notif);
-//                    }
-                } else {
-//                    Toast.makeText(getActivity(), "input " +selectedInput[1], Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), ChartActivity.class);
-                    intent.putExtra("input", selectedInput);
-                    startActivity(intent);
-
-                }
-            }
-        });
 //        edtParam = (Button) rowView.findViewById(R.id.btnParam);
 //        edtParam.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -270,6 +250,25 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
             fromTimePickerDialog.show();
         } else if (v == toTimeExt) {
             toTimePickerDialog.show();
+        }else if(v == mulaiBtn ){
+            if (selectedInput[1] == null || selectedInput[2] == null) {
+                setError();
+            } else {
+                Intent intent = new Intent(getActivity(), ChartActivity.class);
+                intent.putExtra("input", selectedInput);
+                startActivity(intent);
+
+            }
+        }
+    }
+
+    private void setError(){
+        String notif = "Wajib diisi";
+        if (selectedInput[1] == null) {
+            fromDateEtxt.setError(notif);
+        }
+        if (selectedInput[2] == null) {
+            toDateEtxt.setError(notif);
         }
     }
 
