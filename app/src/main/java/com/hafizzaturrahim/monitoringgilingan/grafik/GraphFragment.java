@@ -147,6 +147,7 @@ public class GraphFragment extends Fragment implements View.OnClickListener {
         });
 
         mulaiBtn = (Button) rowView.findViewById(R.id.btnMulai);
+        mulaiBtn.setOnClickListener(this);
 
 //        mulaiBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
