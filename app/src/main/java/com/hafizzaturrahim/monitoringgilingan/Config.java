@@ -11,8 +11,8 @@ import java.util.Date;
  */
 
 public class Config {
-//    public static String base_url = "http://192.168.137.15/gilinganlocal";
-    public static String base_url = "http://gilingan.hol.es";
+    public static String base_url = "http://10.34.246.3/gilinganlocal";
+//    public static String base_url = "http://gilingan.hol.es";
 
     public static String convertDate(String oldDate) {
         String newDate = null;

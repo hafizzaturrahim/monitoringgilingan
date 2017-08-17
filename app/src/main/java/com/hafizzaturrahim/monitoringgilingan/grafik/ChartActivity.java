@@ -127,6 +127,15 @@ public class ChartActivity extends AppCompatActivity {
             axisValues.add(new AxisValue(i).setLabel(label[i]));
         }
 
+//        if (numberOfPoints == 1){
+//            int i = 0;
+//            values.add(new PointValue(i, numbersTab[i]));
+//            axisValues.add(new AxisValue(i).setLabel(label[i]));
+//        }
+
+        if (values.size() == 0){
+            Log.v("value", "kosong");
+        }
         Line line = new Line(values);
         line.setColor(ChartUtils.COLOR_GREEN);
         line.setShape(ValueShape.CIRCLE);
@@ -205,10 +214,13 @@ public class ChartActivity extends AppCompatActivity {
                 numbersTab = new float[numberOfPoints];
                 label = new String[numberOfPoints];
 
+                Log.v("numberpoint", String.valueOf(numberOfPoints));
                 for (int i = 0; i < dataAr.length(); i++) {
                     JSONObject Obj = dataAr.getJSONObject(i);
                     numbersTab[i] = Float.parseFloat(Obj.getString(dataInput[0]));
                     label[i] = Obj.getString("tgl");
+                    Log.v("label ", label[i]);
+                    Log.v("numbertab", String.valueOf(numbersTab[i]));
 //                    Log.d("numberstab "+i, String.valueOf(numbersTab[i]));
 //                    Instruction ins = new Instruction();
 //                    ins.setTitleInstruction(insObj.getString("judul_instruksi"));

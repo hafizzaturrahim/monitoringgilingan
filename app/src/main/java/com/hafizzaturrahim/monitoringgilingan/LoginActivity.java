@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
 
-
         if (sessionManager.isLoggedIn()) {
             Intent intent;
             if ("1".equals(sessionManager.getLevel())) {

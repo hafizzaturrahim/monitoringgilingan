@@ -105,8 +105,7 @@ public class ReportFragment extends Fragment {
                     public void onResponse(String response) {
                         Log.d("response", response);
                         parseJSON(response);
-                        ReportAdapter adapter = new ReportAdapter(getActivity(), reports);
-                        listReport.setAdapter(adapter);
+                        setAdapter();
                         pDialog.dismiss();
 
                     }
@@ -128,6 +127,11 @@ public class ReportFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
+    }
+
+    private void setAdapter(){
+        ReportAdapter adapter = new ReportAdapter(getActivity(), reports);
+        listReport.setAdapter(adapter);
     }
 
     private void parseJSON(String result) {
